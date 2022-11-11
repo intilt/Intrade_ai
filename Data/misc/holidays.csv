@@ -1,0 +1,235 @@
+date, day, description
+2007-01-01,Monday,Bakri ID
+2007-01-26,Friday,Republic Day
+2007-01-30,Tuesday,Moharram
+2007-02-16,Friday,Mahashivratri
+2007-03-27,Tuesday,Ram Navami
+2007-04-06,Friday,Good Friday
+2007-05-01,Tuesday,Maharashtra Day
+2007-05-02,Wednesday,Buddha Pournima
+2007-08-15,Wednesday,Independence Day
+2007-10-02,Tuesday,Gandhi Jayanti
+2007-11-09,Friday,Laxmi Puja*
+2007-12-21,Friday,Bakri ID (falls twice in 2007)
+2007-12-25,Tuesday,Christmas
+2008-03-06,Thursday,Mahashivratri
+2008-03-20,Thursday,Id-E-Milad
+2008-03-21,Friday,Good Friday
+2008-04-14,Monday,Dr. Babasaheb Ambedkar Jayanti
+2008-04-18,Friday,Mahavir Jayanti
+2008-05-01,Thursday,Maharashtra Day
+2008-05-19,Monday,Buddha Pournima
+2008-08-15,Friday,Independence Day
+2008-09-03,Wednesday,Ganesh Chaturthi
+2008-10-02,Thursday,Gandhi Jayanti / Ramzan ID
+2008-10-09,Thursday,Dasara
+2008-10-28,Tuesday,Laxmi Puja
+2008-10-30,Thursday,Bhau Bhij
+2008-11-13,Thursday,Gurunanak Jayanti
+2008-12-09,Tuesday,Bakri ID
+2008-12-25,Thursday,Christmas
+2009-01-08,Thursday,Moharram
+2009-01-26,Monday,Republic Day
+2009-02-23,Monday,Mahashivratri
+2009-03-10,Tuesday,Id e Milad
+2009-03-11,Wednesday,Holi
+2009-03-27,Friday,Gudi Padwa
+2009-04-03,Friday,Ram Navmi
+2009-04-07,Tuesday,Mahavir Jayanti
+2009-04-10,Friday,Good Friday
+2009-04-14,Tuesday,Dr. Ambedkar Jayanti
+2009-05-01,Friday,Maharashtra Day
+2009-08-19,Wednesday,Parsi New Year
+2009-09-21,Monday,Ramzan ID
+2009-09-28,Monday,Dasara
+2009-10-02,Friday,Gandhi Jayanti
+2009-10-19,Monday,Bhau Bhij
+2009-11-02,Monday,Gurunanak Jayanti
+2009-12-25,Friday,Christmas
+2009-12-28,Monday,Moharrum
+2010-01-01,Friday,New Year
+2010-01-26,Tuesday,Republic Day
+2010-02-12,Friday,Mahashivratri
+2010-03-01,Monday,Holi (2nd Day)
+2010-03-24,Wednesday,Ram Navmi
+2010-04-02,Friday,Good Friday
+2010-04-14,Wednesday,Dr. Babasaheb Ambedkar Jayanti 
+2010-09-10,Friday,Ramzan Id 
+2010-11-05,Friday,Diwali Amavasya (Laxmi Puja) 
+2010-11-17,Wednesday,Bakri-Id
+2010-12-17,Friday,Moharum
+2011-01-26,Wednesday,Republic Day
+2011-03-02,Wednesday,Mahashivratri
+2011-04-12,Tuesday,Ram Navmi
+2011-04-14,Thursday,Dr. Babasaheb Ambedkar Jayanti
+2011-04-22,Friday,Good Friday
+2011-08-15,Monday,Independence Day
+2011-08-31,Wednesday,Ramzan Id
+2011-09-01,Thursday,Shri Ganesh Chaturthi
+2011-10-06,Thursday,Dassera
+2011-10-26,Wednesday,Diwali Amavasya (Laxmi Pujan)
+2011-10-27,Thursday,Diwali Balipratipada
+2011-11-07,Monday,Bakri-Id
+2011-11-10,Thursday,Gurunanak Jayanti
+2011-12-06,Tuesday,Moharum
+2012-01-26,Thursday,Republic Day
+2012-02-20,Monday,Mahashivratri
+2012-03-08,Thursday,Holi
+2012-04-05,Thursday,Mahavir Jayanti
+2012-04-06,Friday,Good Friday
+2012-05-01,Tuesday,Maharashtra Day
+2012-08-15,Wednesday,Independence Day
+2012-08-20,Monday,Ramzan Id
+2012-09-19,Wednesday,Ganesh Chaturthi
+2012-10-02,Tuesday,Mahatma Gandhi Jayanti
+2012-10-24,Wednesday,Dussera – Vijaya Dashmi
+2012-10-26,Friday,Bakri Id
+2012-11-13,Tuesday,Diwali Amavasya (Laxmi Pujan)
+2012-11-14,Wednesday,Diwali Balipratipada
+2012-11-28,Wednesday,Gurunanak Jayanti
+2012-12-25,Tuesday,Christmas
+2013-01-26,Saturday,Republic Day
+2013-03-27,Wednesday,Holi
+2013-03-29,Friday,Good Friday
+2013-04-19,Friday,Ram Navami
+2013-04-24,Wednesday,Mahavir Jayanti
+2013-05-01,Wednesday,May Day
+2013-08-09,Friday,Ramzan ID
+2013-08-15,Thursday,Independence Day
+2013-09-09,Monday,Ganesh Chaturthi
+2013-10-02,Wednesday,Gandhi Jayanti
+2013-10-16,Wednesday,Bakri ID
+2013-11-04,Monday,Diwali – Balipratipada
+2013-11-14,Thursday,Muharram
+2013-12-25,Wednesday,Christmas
+2014-02-27,Thursday,Mahashivratri
+2014-03-17,Monday,Holi
+2014-04-08,Tuesday,Ram Navmi
+2014-04-14,Monday,Dr. Babasaheb Ambedkar Jayanti
+2014-04-18,Friday,Good Friday
+2014-04-24,Thursday,Parlimentary Elections
+2014-05-01,Thursday,May Day
+2014-07-29,Tuesday,Ramzan ID
+2014-08-15,Friday,Independence Day
+2014-08-29,Friday,Ganesh Chaturthi
+2014-10-02,Thursday,Mahatma Gandhi Jayanti
+2014-10-03,Friday,Dasera
+2014-10-06,Monday,Bakri ID
+2014-10-15,Wednesday,General Assembly Elections
+2014-10-24,Friday,Diwali-Balipratipada
+2014-11-04,Tuesday,Moharram
+2014-11-06,Thursday,Gurunank Jayanti
+2014-12-25,Thursday,Christmas
+2015-01-26,Monday,Republic Day
+2015-02-17,Tuesday,Mahashivratri
+2015-03-06,Friday,Holi
+2015-04-02,Thursday,Mahavir Jayanti
+2015-04-03,Friday,Good Friday
+2015-04-14,Tuesday,Dr.Baba Saheb Ambedkar Jayanti
+2015-05-01,Friday,Maharashtra Day
+2015-09-17,Thursday,Ganesh Chaturthi
+2015-09-25,Friday,Bakri Id
+2015-10-02,Friday,Mahatma Gandhi Jayanti
+2015-10-22,Thursday,Dussehra
+2015-11-11,Wednesday,Diwali Laxmi Pujan
+2015-11-12,Thursday,Diwali Balipratipada
+2015-11-25,Wednesday,Gurunanak Jayanti
+2015-12-25,Friday,Christmas
+2016-01-26,Tuesday,Republic Day
+2016-03-07,Monday,Mahashivratri
+2016-03-24,Thursday,Holi
+2016-03-25,Friday,Good Friday
+2016-04-14,Thursday,Dr.Baba Saheb Ambedkar Jayanti
+2016-04-15,Friday,Ram Navami
+2016-04-19,Tuesday,Mahavir Jayanti
+2016-07-06,Wednesday,Id-Ul-Fitr (Ramzan Id)
+2016-08-15,Monday,Independence Day
+2016-09-05,Monday,Ganesh Chaturthi
+2016-09-13,Tuesday,Bakri Id
+2016-10-11,Tuesday,Dussehra
+2016-10-12,Wednesday,Muharram
+2016-10-31,Monday,Diwali
+2016-11-14,Monday,Gurunanak Jayanti
+2017-01-26,Thursday,Republic Day
+2017-02-24,Friday,Mahashivratri
+2017-03-13,Monday,Holi
+2017-04-04,Tuesday,Ram Navami
+2017-04-14,Friday,Good Friday
+2017-04-14,Friday,Dr.Baba Saheb Ambedkar Jayanti
+2017-05-01,Monday,Maharashtra Day
+2017-06-26,Monday,Id-Ul-Fitr (Ramzan Id)
+2017-08-15,Tuesday,Independence Day
+2017-08-25,Friday,Ganesh Chaturthi
+2017-10-02,Monday,Mahatama Gandhi Jayanti
+2017-10-19,Thursday,Diwali-Laxmi Pujan
+2017-10-20,Friday,Diwali-Balipratipada
+2017-12-25,Monday,Christmas
+2018-01-26,Friday,Republic Day
+2018-02-13,Tuesday,Mahashivratri
+2018-03-02,Friday,Holi
+2018-03-29,Thursday,Mahavir Jayanti
+2018-03-30,Friday,Good Friday
+2018-05-01,Tuesday,Maharashtra Day
+2018-08-15,Wednesday,Independence Day
+2018-08-22,Wednesday,Bakri ID
+2018-09-13,Thursday,Ganesh Chaturthi
+2018-09-20,Thursday,Moharram
+2018-10-02,Tuesday,Mahatama Gandhi Jayanti
+2018-10-18,Thursday,Dasera
+2018-11-07,Wednesday,Diwali-Laxmi Pujan
+2018-11-08,Thursday,Diwali-Balipratipada
+2018-11-23,Friday,Gurunanak Jayanti
+2018-12-25,Tuesday,Christmas
+2019-03-04,Monday,Mahashivratri
+2019-03-21,Thursday,Holi
+2019-04-17,Wednesday,Mahavir Jayanti
+2019-04-19,Friday,Good Friday
+2019-05-01,Wednesday,Maharashtra Day
+2019-06-05,Wednesday,Id-ul-Fitr (Ramzan ID)
+2019-08-12,Monday,Bakri Id / Eid ul-Adha
+2019-08-15,Thursday,Independence Day
+2019-09-02,Monday,Ganesh Chaturthi
+2019-09-10,Tuesday,Moharram
+2019-10-02,Wednesday,Mahatma Gandhi Jayanti
+2019-10-08,Tuesday,Dussehra
+2019-10-28,Monday,Diwali-Balipratipada
+2019-11-12,Tuesday,Gurunanak Jayanti
+2019-12-25,Wednesday,Christmas
+2020-02-21,Friday,Mahashivratri
+2020-03-10,Tuesday,Holi
+2020-04-02,Thursday,Ram Navami
+2020-04-06,Monday,Mahavir Jayanti
+2020-04-10,Friday,Good Friday
+2020-04-14,Tuesday,Dr.Baba Saheb Ambedkar Jayanti
+2020-05-01,Friday,Maharashtra Day
+2020-05-25,Monday,Id-Ul-Fitr (Ramzan Id)
+2020-10-02,Friday,Mahatma Gandhi Jayanti
+2020-11-16,Monday,Diwali Balipratipada
+2020-11-30,Monday,Gurunanak Jayanti
+2020-12-25,Friday,Christmas
+2021-01-26,Tuesday,Republic Day
+2021-03-11,Thursday,Mahashivratri
+2021-03-29,Monday,Holi
+2021-04-02,Friday,Good Friday
+2021-04-14,Wednesday,Dr.Baba Saheb Ambedkar Jayanti
+2021-04-21,Wednesday,Ram Navami
+2021-05-13,Thursday,Id-Ul-Fitr (Ramzan Id)
+2021-07-21,Wednesday,Bakri Id
+2021-08-19,Thursday,Muharram
+2021-09-10,Friday,Ganesh Chaturthi
+2021-10-15,Friday,Dussehra
+2021-11-04,Thursday,Diwali* Laxmi Puja
+2021-11-05,Friday,Diwali Balipratipada
+2021-11-19,Friday,Gurunanak Jayanti
+2022-01-26,Wednesday,Republic Day
+2022-03-01,Tuesday,Mahashivratri
+2022-03-18,Friday,Holi
+2022-04-14,Thursday,Dr. Baba Saheb Ambedkar Jayanti / Mahavir Jayanti
+2022-04-15,Friday,Good Friday
+2022-05-03,Tuesday,Id-Ul-Fitr (Ramzan Id)
+2022-08-09,Tuesday,Moharram
+2022-08-15,Monday,Independence Day
+2022-08-31,Wednesday,Ganesh Chaturthi
+2022-10-05,Wednesday,Dussehra
+2022-10-24,Monday,Diwali-Laxmi Pujan
+2022-10-26,Wednesday,Diwali-Balipratipada
