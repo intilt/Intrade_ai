@@ -68,9 +68,9 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  c.columns:
         c[stock_name]= pd.Series([str(t) for t in missing_data.index.date])
 
-    #a.to_csv(traded_on_holidays_file,index=False)
-    #b.to_csv(traded_on_weekends_file,index=False)
-    #c.to_csv(missing_data_file,index=False)
+    a.to_csv(traded_on_holidays_file,index=False)
+    b.to_csv(traded_on_weekends_file,index=False)
+    c.to_csv(missing_data_file,index=False)
 
     return stock_df_continous
 
