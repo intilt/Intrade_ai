@@ -5,14 +5,17 @@ import plotly.express as px
 import talib
 from talib import abstract
 from datetime import datetime
+import json
 
+with open('../config/config_cleaning.json', 'r') as openfile:
+    config_cleaning = json.load(openfile)
 
 def get_missing_data_dates(stock_name,stock_data):
     
-    holidays_file = "../Data/misc/holidays.csv"
-    traded_on_holidays_file = "../Data/misc/traded_on_holidays.csv"
-    traded_on_weekends_file = "../Data/misc/traded_on_weekends.csv"
-    missing_data_file = "../Data/misc/missing_data.csv"
+    holidays_file = config_cleaning['file_paths']['holidays_file']
+    traded_on_holidays_file = config_cleaning['file_paths']['traded_on_holidays_file']
+    traded_on_weekends_file = config_cleaning['file_paths']['traded_on_weekends_file']
+    missing_data_file = config_cleaning['file_paths']['missing_data_file']
     
     stock_df = stock_data.copy()
     stock_df.drop(columns=['stock_code'],inplace=True)
