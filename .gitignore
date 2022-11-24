@@ -1,4 +1,4 @@
 .vscode/
-C:/Users/Amrit/Intilt/Intrade_ai/Data/
-C:/Users/Amrit/Intilt/Intrade_ai/Progress/
-C:/Users/Amrit/Intilt/Intrade_ai/src/data_cleaning/
+../Data/
+../Progress/
+../Notebooks/utils/__pycache__

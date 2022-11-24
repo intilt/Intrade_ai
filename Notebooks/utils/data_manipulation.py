@@ -1,9 +1,6 @@
-import pandas as pd 
-import os
-import plotly.express as px
+import pandas as pd
 import talib
 from talib import abstract
-from datetime import datetime
 
 ## function to get Pivot Points, Supports and Resistances
 def PPSR(df):  
@@ -25,8 +22,7 @@ def indicator(data):
     stock_data['rsi'] = abstract.RSI(data, timeperiod=14) # type: ignore # Relative Strength Index
     stock_data['ema'] = abstract.EMA(data, timeperiod=10) # type: ignore # Exponential Moving Average
     stock_data['sma'] = abstract.SMA(data, timeperiod=20) # type: ignore # Simple Moving Average
-    stock_data['UP_BB'], stock_data['MID_BB'], stock_data['LOW_BB'] = talib.BBANDS(stock_data['close'], \  # type: ignore
-        timeperiod=20, nbdevup=2, nbdevdn=2, matype=0) # Bollinger Bands of upper, middle and lower bands
+    stock_data['UP_BB'], stock_data['MID_BB'], stock_data['LOW_BB'] = talib.BBANDS(stock_data['close'], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0) # type: ignore # Bollinger Bands of upper, middle and lower bands
     return stock_data
 
 ## function to get all indicator in dataframe
@@ -73,6 +69,6 @@ def pattern_recognition(df):
     data['hammer'] = abstract.CDLHAMMER(data)  # type: ignore
     data['shooting_star'] = abstract.CDLSHOOTINGSTAR(data)  # type: ignore
     data['doji'] = abstract.CDLDOJI(data)  # type: ignore
-    data['dragonfly_dogi'] = abstract.CDLDRAGONFLYDOJI(data)  # type: ignore
-    data['gravestone_dogi'] = abstract.CDLGRAVESTONEDOJI(data)  # type: ignore
+    data['dragonfly_dogi'] = abstract.CDLDRAGONFLYDOJI(data)   # type: ignore
+    data['gravestone_dogi'] = abstract.CDLGRAVESTONEDOJI(data)   # type: ignore
     return data
