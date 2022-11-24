@@ -3,7 +3,7 @@ import os
 import plotly.express as px
 import talib
 from talib import abstract
-from datetime import *
+from datetime import datetime
 
 ## function to get Pivot Points, Supports and Resistances
 def PPSR(df):  
@@ -19,9 +19,18 @@ def PPSR(df):
     PSR = pd.DataFrame(psr)
     return PSR
 
+## function to get indicator values in dataframe
+def indicator(data):
+    stock_data = data.copy()
+    stock_data['rsi'] = abstract.RSI(data, timeperiod=14) # type: ignore # Relative Strength Index
+    stock_data['ema'] = abstract.EMA(data, timeperiod=10) # type: ignore # Exponential Moving Average
+    stock_data['sma'] = abstract.SMA(data, timeperiod=20) # type: ignore # Simple Moving Average
+    stock_data['UP_BB'], stock_data['MID_BB'], stock_data['LOW_BB'] = talib.BBANDS(stock_data['close'], \  # type: ignore
+        timeperiod=20, nbdevup=2, nbdevdn=2, matype=0) # Bollinger Bands of upper, middle and lower bands
+    return stock_data
 
 ## function to get all indicator in dataframe
-def final_indicator(data):
+def get_indicators(data):
     # converting daily data to monthly data
     nifty_df_monthly = data.groupby(pd.Grouper(freq='M')).agg({"open": "first", 
                                              "high": "max", 
@@ -34,7 +43,7 @@ def final_indicator(data):
     data['new_date'] = data.index + pd.DateOffset(months=-1)
     data['month-year'] = data['new_date'].dt.strftime('%Y-%m')
     data = data.drop(['new_date'], axis=1)
-    nifty_ppsr_monthly['month-year'] = nifty_ppsr_monthly.index.strftime('%Y-%m')
+    nifty_ppsr_monthly['month-year'] = nifty_ppsr_monthly.index.strftime('%Y-%m')  # type: ignore
 
     # merging dataframe df and df1 on month-year column
     df = data.copy()
@@ -59,11 +68,11 @@ def final_indicator(data):
 def pattern_recognition(df):
     # pattern recognition
     data = df.copy()
-    data['engulfing'] = abstract.CDLENGULFING(data)
-    data['harami'] = abstract.CDLHARAMI(data)
-    data['hammer'] = abstract.CDLHAMMER(data)
-    data['shooting_star'] = abstract.CDLSHOOTINGSTAR(data)
-    data['doji'] = abstract.CDLDOJI(data)
-    data['dragonfly_dogi'] = abstract.CDLDRAGONFLYDOJI(data)
-    data['gravestone_dogi'] = abstract.CDLGRAVESTONEDOJI(data)
+    data['engulfing'] = abstract.CDLENGULFING(data)  # type: ignore
+    data['harami'] = abstract.CDLHARAMI(data)  # type: ignore
+    data['hammer'] = abstract.CDLHAMMER(data)  # type: ignore
+    data['shooting_star'] = abstract.CDLSHOOTINGSTAR(data)  # type: ignore
+    data['doji'] = abstract.CDLDOJI(data)  # type: ignore
+    data['dragonfly_dogi'] = abstract.CDLDRAGONFLYDOJI(data)  # type: ignore
+    data['gravestone_dogi'] = abstract.CDLGRAVESTONEDOJI(data)  # type: ignore
     return data
