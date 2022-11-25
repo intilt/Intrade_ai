@@ -1,1 +1,9 @@
+<<<<<<< HEAD
 .vscode/
+=======
+.vscode/
+Progress/
+TA_Lib-0.4.24-cp310-cp310-win_amd64.whl
+utils/__pycache__/
+src/data_cleaning/.DS_Store
+>>>>>>> feature/23_manage_path

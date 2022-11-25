@@ -19,9 +19,24 @@ def PPSR(df):
     PSR = pd.DataFrame(psr)
     return PSR
 
+<<<<<<< HEAD
 
 ## function to get all indicator in dataframe
 def final_indicator(data):
+=======
+## function to get indicator values in dataframe
+def indicator(data):
+    stock_data = data.copy()
+    stock_data['rsi'] = abstract.RSI(data, timeperiod=14) # Relative Strength Index
+    stock_data['ema'] = abstract.EMA(data, timeperiod=10) # Exponential Moving Average
+    stock_data['sma'] = abstract.SMA(data, timeperiod=20) # Simple Moving Average
+    stock_data['UP_BB'], stock_data['MID_BB'], stock_data['LOW_BB'] = talib.BBANDS(stock_data['close'], \
+        timeperiod=20, nbdevup=2, nbdevdn=2, matype=0) # Bollinger Bands of upper, middle and lower bands
+    return stock_data
+
+## function to get all indicator in dataframe
+def get_indicators(data):
+>>>>>>> feature/23_manage_path
     # converting daily data to monthly data
     nifty_df_monthly = data.groupby(pd.Grouper(freq='M')).agg({"open": "first", 
                                              "high": "max", 
