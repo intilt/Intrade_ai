@@ -7,7 +7,7 @@ from talib import abstract
 from datetime import datetime
 import json
 
-with open('../config/config_cleaning.json', 'r') as openfile:
+with open('config/config_cleaning.json', 'r') as openfile:
     config_cleaning = json.load(openfile)
 
 def get_missing_data_dates(stock_name,stock_data):
