@@ -19,11 +19,6 @@ def PPSR(df):
     PSR = pd.DataFrame(psr)
     return PSR
 
-<<<<<<< HEAD
-
-## function to get all indicator in dataframe
-def final_indicator(data):
-=======
 ## function to get indicator values in dataframe
 def indicator(data):
     stock_data = data.copy()
@@ -36,7 +31,6 @@ def indicator(data):
 
 ## function to get all indicator in dataframe
 def get_indicators(data):
->>>>>>> feature/23_manage_path
     # converting daily data to monthly data
     nifty_df_monthly = data.groupby(pd.Grouper(freq='M')).agg({"open": "first", 
                                              "high": "max", 
