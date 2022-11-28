@@ -10,6 +10,9 @@ import json
 with open('../config/config_cleaning.json', 'r') as openfile:
     config_cleaning = json.load(openfile)
 
+## Need to use for daily dataframe
+## for the provided data this function captures the list of traded_on_holidays, traded_on_weekends and missing_data.
+## Function also returns the continous data
 def get_missing_data_dates(stock_name,stock_data):
     
     holidays_file = config_cleaning['file_paths']['holidays_file']
@@ -77,3 +80,27 @@ def get_missing_data_dates(stock_name,stock_data):
 
     return stock_df_continous
 
+
+## 1min data / intraday data
+## remove all the null values before first notna index (time) and last notna index (time)
+def first_to_last_notna_data(data):
+    grouped = data.groupby(pd.Grouper(freq='1D'))
+    trimmed_df = pd.DataFrame()
+    for name, group in grouped:
+        # print(name)
+        if group.empty:
+            continue
+        else:
+            trimmed_df = pd.concat([trimmed_df,group[group.first_valid_index():group.last_valid_index()]])
+        # print(group)    
+    return trimmed_df
+
+
+## 1min data / intraday data
+## removing extra values in others df with count on that day is less than 5
+def count_above_5_days(data):
+    others_count = data.groupby(pd.Grouper(freq='1D'))['open'].count().reset_index(name='counts')
+    # others.to_csv("nifty_others.csv")
+    others_count = others_count.set_index('datetime')
+    others_count = others_count[others_count['counts']>5]
+    return others_count
