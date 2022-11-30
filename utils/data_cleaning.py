@@ -7,7 +7,7 @@ from talib import abstract
 from datetime import datetime,date,time
 import json
 
-with open('../config/config_cleaning.json', 'r') as openfile:
+with open('config/config_cleaning.json', 'r') as openfile:
     config_cleaning = json.load(openfile)
 
 holidays_file = config_cleaning['file_paths']['holidays_file']
