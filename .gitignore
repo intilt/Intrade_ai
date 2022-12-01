@@ -6,3 +6,5 @@ Notebooks/ta-lib/
 ta-lib-0.4.0-src.tar.gz
 *.pyc
 __pycache__/
+utils/__pycache__/
+src/data_cleaning/.DS_Store
