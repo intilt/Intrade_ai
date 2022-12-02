@@ -7,3 +7,5 @@ DateTime
 TA_Lib-0.4.24-cp310-cp310-win_amd64.whl
 backtrader
 mplfinance==0.12.9b5
+ta-lib
+# TA_Lib-0.4.24-cp310-cp310-win_amd64.whl
