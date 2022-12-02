@@ -1,6 +1,7 @@
-pandas
-numpy
-nbformat
-plotly
+pandas>=1.5.1
+numpy>=1.21.6
+nbformat==5.7.0
+plotly==5.11.0
 DateTime
-TA_Lib-0.4.24-cp310-cp310-win_amd64.whl
+ta-lib
+# TA_Lib-0.4.24-cp310-cp310-win_amd64.whl
