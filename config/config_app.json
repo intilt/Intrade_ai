@@ -1,0 +1,16 @@
+{
+    "instrument" : {
+        "nifty":"Data/Nifty/",
+        "reliance":"Data/Reliance/"
+    },
+    "timeframe" : {
+        "1min":"1min.csv",
+        "5min":"5min.csv",
+        "1day":"1day.csv"
+    },
+    "indicator" : {
+        "sma":"SMA",
+        "ema":"EMA",
+        "rsi":"RSI"
+    }
+}
