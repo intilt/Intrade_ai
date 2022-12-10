@@ -203,6 +203,11 @@ def get_continuous_1min_data(stock_name,data):
 
     combined_1min = combined_1min.drop(lll.index)
 
+    ## remove pre-open data from 2010-10-18 (new trading timings)
+    new_trading_timings = combined_1min[combined_1min.index.date > date(2010,10,17)]
+    to_delete = new_trading_timings[new_trading_timings.index.time < time(9,16)]
+    combined_1min = combined_1min.drop(to_delete.index)
+
     ## remove dates with no trading data
     no_data_days = no_traded_data_days_1min(combined_1min)
     combined_1min = combined_1min[~combined_1min.index.floor('D').isin(no_data_days)]
