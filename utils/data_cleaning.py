@@ -121,6 +121,21 @@ def count_above_5_days(data):
 
 
 ## 1min data / intraday data
+## adjust the 1min data with conclusions made from analysis/ data captured post candle close rather than with candle creation during each minute
+def time_adjustment(time_index):
+    if time_index < datetime(2009,10,22,23,59,59):
+        return time_index
+    elif datetime(2009,10,23,00,1,1) < time_index < datetime(2009,12,31,23,59,59):
+        return time_index - pd.Timedelta(minutes=1)
+    elif time_index.date()==date(2010,1,4):
+        return time_index - pd.Timedelta(minutes=1)
+    elif datetime(2010,1,5,00,1,1) < time_index < datetime(2010,10,15,23,59,59):
+        return time_index - pd.Timedelta(minutes=1)
+    elif time_index > datetime(2010,10,18,00,1,1):
+        return time_index - pd.Timedelta(minutes=1)
+
+
+## 1min data / intraday data
 ## creating continous data
 def get_continuous_1min_data(stock_name,data):
 
@@ -203,20 +218,25 @@ def get_continuous_1min_data(stock_name,data):
 
     combined_1min = combined_1min.drop(lll.index)
 
-    ## remove pre-open data from 2010-10-18 (new trading timings)
-    new_trading_timings = combined_1min[combined_1min.index.date > date(2010,10,17)]
-    to_delete = new_trading_timings[new_trading_timings.index.time < time(9,16)]
-    combined_1min = combined_1min.drop(to_delete.index)
-
     ## remove dates with no trading data
     no_data_days = no_traded_data_days_1min(combined_1min)
     combined_1min = combined_1min[~combined_1min.index.floor('D').isin(no_data_days)]
+
+    ## adjust time in the data with time_adjustment function
+    combined_1min['datetime']= combined_1min.index
+    combined_1min['datetime'] = combined_1min['datetime'].apply(lambda x:time_adjustment(x))
+    combined_1min.set_index('datetime', inplace=True)
+
+    ## Remove data from 9:00 to 9:14 (pre-opening) from 2010-10-17
+    combined_1min = combined_1min.drop(combined_1min[(time(8,59,0)<combined_1min.index.time) & (combined_1min.index.time<time(9,15,0)) & (combined_1min.index.date>date(2010,10,17))].index)
+    ## Remove data with NaN at 15:30
+    combined_1min = combined_1min.drop(combined_1min[(combined_1min.index.time==time(15,30,00)) & (combined_1min.open.isnull())].index)
 
     ## get missing data dates in 1min but not in 1 day missing data
     daily_missing_dates = pd.read_csv(missing_data_file)
     stock_daily_missing_dates = daily_missing_dates[stock_name].values.tolist()
     missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
-
+    missing_1min_dates.sort()
 
     if os.path.exists(missing_data_file_1min):
         c = pd.read_csv(missing_data_file_1min)
