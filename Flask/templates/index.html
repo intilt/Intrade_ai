@@ -37,21 +37,21 @@
     <hr />
     <form action="{{url_for('check')}}" method="post">
       Instrument:
-      <select name="instrument" id="instrument">
+      <select name="instrument" id="instrument" required>
         <option value="nifty">nifty</option>
         <option value="reliance">reliance</option>
       </select>
       <br />
       Timeframe:
-      <select name="timeframe" id="timeframe">
+      <select name="timeframe" id="timeframe" required>
         <option value="1min">1min</option>
         <option value="5min">5min</option>
         <option value="1day">1day</option>
       </select>
       <br />
       Date Range:
-      <input type="date" name="from" id="from" />&emsp;
-      <input type="date" name="to" id="to" />
+      <input type="date" name="from" id="from" required />&emsp;
+      <input type="date" name="to" id="to" required />
       <br />
 
       <div class="form">
@@ -65,7 +65,7 @@
                 <option value="ema">EMA</option>
                 <option value="rsi">RSI</option>
               </select>
-              <select id="parameter_0">
+              <select id="field_0">
                 <option value="open">open</option>
                 <option value="close">close</option>
                 <option value="high">high</option>

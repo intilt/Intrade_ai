@@ -1,16 +1,35 @@
 {
-    "instrument" : {
-        "nifty":"Data/Nifty/",
-        "reliance":"Data/Reliance/"
+  "instrument": {
+    "nifty": "raw-data/nifty/",
+    "reliance": "raw-data/reliance/"
+  },
+  "timeframe": {
+    "1min": "1min.csv",
+    "5min": "5min.csv",
+    "1day": "1day.csv"
+  },
+  "indicators": {
+    "sma": "SMA",
+    "ema": "EMA",
+    "rsi": "RSI",
+    "bbands": "BBANDS"
+  },
+  "indicator_params": {
+    "sma": {
+      "timeperiod": [10, 14, 20],
+      "field": ["close", "open", "high", "low"]
     },
-    "timeframe" : {
-        "1min":"1min.csv",
-        "5min":"5min.csv",
-        "1day":"1day.csv"
+    "ema": {
+      "timeperiod": [10, 14, 20],
+      "field": ["close", "open", "high", "low"]
     },
-    "indicator" : {
-        "sma":"SMA",
-        "ema":"EMA",
-        "rsi":"RSI"
-    }
+    "rsi": {
+      "timeperiod": [10, 14, 20],
+      "field": ["close", "open", "high", "low"]
+    },
+    "bbands": {
+        "timeperiod": [10, 14, 20],
+        "field": ["close", "open", "high", "low"]
+      }
+  }
 }
