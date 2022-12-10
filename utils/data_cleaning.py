@@ -14,6 +14,7 @@ holidays_file = config_cleaning['file_paths']['holidays_file']
 traded_on_holidays_file = config_cleaning['file_paths']['traded_on_holidays_file']
 traded_on_weekends_file = config_cleaning['file_paths']['traded_on_weekends_file']
 missing_data_file = config_cleaning['file_paths']['missing_data_file']
+missing_data_file_1min = config_cleaning['file_paths']['missing_data_file_1min']
 
 
 ## Need to use for daily dataframe
@@ -96,6 +97,18 @@ def first_to_last_notna_data(data):
         # print(group)    
     return trimmed_df
 
+## 1min data / intraday data
+## capture dates where there is no data atall on that day. returns list of dates
+def no_traded_data_days_1min(data):
+    grouped = data.groupby(data.index.date)
+    no_traded_days = []
+    for name, group in grouped:
+        # print(name)
+        if group.isnull().all().all():
+            no_traded_days.append(name)
+    no_traded_days = [s.strftime('%Y-%m-%d') for s in no_traded_days]
+    return no_traded_days
+
 
 ## 1min data / intraday data
 ## removing extra values in others df with count on that day is less than 5
@@ -109,7 +122,7 @@ def count_above_5_days(data):
 
 ## 1min data / intraday data
 ## creating continous data
-def get_continuous_1min_data(data):
+def get_continuous_1min_data(stock_name,data):
 
     data['datetime']=data['date']+" "+data['time']
     data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
@@ -167,6 +180,29 @@ def get_continuous_1min_data(data):
 
     combined_1min = pd.concat([combined_1min_nonholidays,combined_1min_holidays])
     combined_1min = combined_1min.sort_index(ascending=True)
+
+    ## dropping duplicate rows
+    combined_1min = combined_1min[(~combined_1min.duplicated()) | (combined_1min['open'].isnull())]
+
+    ## remove dates with no trading data
+    no_data_days = no_traded_data_days_1min(combined_1min)
+    combined_1min = combined_1min[~combined_1min.index.floor('D').isin(no_data_days)]
+
+    ## get missing data in 1min but not in 1 day missing data
+    daily_missing_dates = pd.read_csv(missing_data_file)
+    stock_daily_missing_dates = daily_missing_dates[stock_name].values.tolist()
+    missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
+
+
+    if os.path.exists(missing_data_file_1min):
+        c = pd.read_csv(missing_data_file_1min)
+    else:
+        c = pd.DataFrame()
+    if stock_name not in  c.columns:
+        c[stock_name]= missing_1min_dates
+
+    c.to_csv(missing_data_file_1min,index=False)
+
 
     return combined_1min
 
