@@ -177,12 +177,12 @@ def get_continuous_1min_data(stock_name,data):
     combined_1min = combined_1min.sort_index(ascending=True)
 
     ## Data in weekends and weekdays
-    combined_1min_weekdays = combined_1min[combined_1min.index.dayofweek < 5]
-    combined_1min_weekends = combined_1min[combined_1min.index.dayofweek > 4]
+    combined_1min_weekdays = combined_1min[combined_1min.index.dayofweek < 5]  # type: ignore
+    combined_1min_weekends = combined_1min[combined_1min.index.dayofweek > 4]  # type: ignore
 
-    combined_1min_weekends = combined_1min_weekends[combined_1min_weekends.index.floor('D').isin(count_above_5_days(combined_1min_weekends).index)]
+    combined_1min_weekends = combined_1min_weekends[combined_1min_weekends.index.floor('D').isin(count_above_5_days(combined_1min_weekends).index)]  # type: ignore
     combined_1min_weekends = first_to_last_notna_data(combined_1min_weekends)
-    combined_1min = pd.concat([combined_1min_weekdays,combined_1min_weekends])
+    combined_1min = pd.concat([combined_1min_weekdays,combined_1min_weekends])  # type: ignore
     combined_1min = combined_1min.sort_index(ascending=True)
 
     ## Data in holidays
