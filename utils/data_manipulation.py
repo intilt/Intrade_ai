@@ -103,7 +103,7 @@ def plot_support_resistance_levels(df, levels, level_types):
         plt.hlines(level[1],
                 xmin = df['Date'][level[0]],
                 xmax = max(df['Date']),
-                colors = 'blue')
+                colors = 'blue')  # type: ignore
         plt.text(df['Date'][level[0]], level[1], (str(level_type) + ': ' + str(level[1]) + ' '), ha='right', va='center', fontweight='bold', fontsize='x-small')
         plt.title('Support and Resistance levels', fontsize=24, fontweight='bold')
         fig.show()
@@ -116,7 +116,7 @@ def distance_from_mean(df, level,levels):
     return np.sum([abs(level - y) < mean for y in levels]) == 0
 
 def get_support_resistance(df):
-    df = df.set_index("datetime")
+    #df = df.set_index("datetime")
     df['Date'] = pd.to_datetime(df.index)
     df['Date'] = df['Date'].apply(mpl_dates.date2num)
     df = df.loc[:,['Date', 'open', 'high', 'low', 'close']]
@@ -142,7 +142,7 @@ def get_support_resistance(df):
                 level_types.append('Resistance')
     plot_support_resistance_levels(df, levels, level_types)
     df1 = pd.DataFrame(lst)
-    df1.columns = ['datetime', 'level', 'level_type']
+    df1.columns = ['datetime', 'level', 'level_type']  # type: ignore
     df1 = df1.set_index('datetime')
     df2 = df.join(df1)
     df2 = df2.drop(['Date'], axis=1)

@@ -14,6 +14,7 @@ holidays_file = config_cleaning['file_paths']['holidays_file']
 traded_on_holidays_file = config_cleaning['file_paths']['traded_on_holidays_file']
 traded_on_weekends_file = config_cleaning['file_paths']['traded_on_weekends_file']
 missing_data_file = config_cleaning['file_paths']['missing_data_file']
+missing_data_file_1min = config_cleaning['file_paths']['missing_data_file_1min']
 
 
 ## Need to use for daily dataframe
@@ -96,6 +97,18 @@ def first_to_last_notna_data(data):
         # print(group)    
     return trimmed_df
 
+## 1min data / intraday data
+## capture dates where there is no data atall on that day. returns list of dates
+def no_traded_data_days_1min(data):
+    grouped = data.groupby(data.index.date)
+    no_traded_days = []
+    for name, group in grouped:
+        # print(name)
+        if group.isnull().all().all():
+            no_traded_days.append(name)
+    no_traded_days = [s.strftime('%Y-%m-%d') for s in no_traded_days]
+    return no_traded_days
+
 
 ## 1min data / intraday data
 ## removing extra values in others df with count on that day is less than 5
@@ -108,8 +121,23 @@ def count_above_5_days(data):
 
 
 ## 1min data / intraday data
+## adjust the 1min data with conclusions made from analysis/ data captured post candle close rather than with candle creation during each minute
+def time_adjustment(time_index):
+    if time_index < datetime(2009,10,22,23,59,59):
+        return time_index
+    elif datetime(2009,10,23,00,1,1) < time_index < datetime(2009,12,31,23,59,59):
+        return time_index - pd.Timedelta(minutes=1)
+    elif time_index.date()==date(2010,1,4):
+        return time_index - pd.Timedelta(minutes=1)
+    elif datetime(2010,1,5,00,1,1) < time_index < datetime(2010,10,15,23,59,59):
+        return time_index - pd.Timedelta(minutes=1)
+    elif time_index > datetime(2010,10,18,00,1,1):
+        return time_index - pd.Timedelta(minutes=1)
+
+
+## 1min data / intraday data
 ## creating continous data
-def get_continuous_1min_data(data):
+def get_continuous_1min_data(stock_name,data):
 
     data['datetime']=data['date']+" "+data['time']
     data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
@@ -149,12 +177,12 @@ def get_continuous_1min_data(data):
     combined_1min = combined_1min.sort_index(ascending=True)
 
     ## Data in weekends and weekdays
-    combined_1min_weekdays = combined_1min[combined_1min.index.dayofweek < 5]
-    combined_1min_weekends = combined_1min[combined_1min.index.dayofweek > 4]
+    combined_1min_weekdays = combined_1min[combined_1min.index.dayofweek < 5]  # type: ignore
+    combined_1min_weekends = combined_1min[combined_1min.index.dayofweek > 4]  # type: ignore
 
-    combined_1min_weekends = combined_1min_weekends[combined_1min_weekends.index.floor('D').isin(count_above_5_days(combined_1min_weekends).index)]
+    combined_1min_weekends = combined_1min_weekends[combined_1min_weekends.index.floor('D').isin(count_above_5_days(combined_1min_weekends).index)]  # type: ignore
     combined_1min_weekends = first_to_last_notna_data(combined_1min_weekends)
-    combined_1min = pd.concat([combined_1min_weekdays,combined_1min_weekends])
+    combined_1min = pd.concat([combined_1min_weekdays,combined_1min_weekends])  # type: ignore
     combined_1min = combined_1min.sort_index(ascending=True)
 
     ## Data in holidays
@@ -167,6 +195,58 @@ def get_continuous_1min_data(data):
 
     combined_1min = pd.concat([combined_1min_nonholidays,combined_1min_holidays])
     combined_1min = combined_1min.sort_index(ascending=True)
+
+    ## dropping duplicate rows
+    combined_1min = combined_1min[(~combined_1min.duplicated()) | (combined_1min['open'].isnull())]
+
+    ## removed data when trading halted
+    df_halted = combined_1min.loc['2017-07-10 9:30:00':'2017-07-10 12:30:00']
+    combined_1min = combined_1min.drop(df_halted.index)
+
+    df_halted = combined_1min.loc['2021-02-24 11:40:00':'2017-07-10 15:30:00']
+    combined_1min = combined_1min.drop(df_halted.index)
+
+    ##IMP## Need to add resumed data on 2021-02-24 from 15:45 to 17:00
+
+    ## remove lunch timings for few dates
+    combined_1min_trimmed_time = combined_1min[combined_1min.index.time < time(12,10)]
+    combined_1min_trimmed_time = combined_1min_trimmed_time[combined_1min_trimmed_time.index.time > time(11,25)]
+
+    l = no_traded_data_days_1min(combined_1min_trimmed_time)
+    ll = [datetime.strptime(x, "%Y-%m-%d").date() for x in l]
+    lll = combined_1min_trimmed_time[combined_1min_trimmed_time.index.floor('D').isin(ll)]
+
+    combined_1min = combined_1min.drop(lll.index)
+
+    ## remove dates with no trading data
+    no_data_days = no_traded_data_days_1min(combined_1min)
+    combined_1min = combined_1min[~combined_1min.index.floor('D').isin(no_data_days)]
+
+    ## adjust time in the data with time_adjustment function
+    combined_1min['datetime']= combined_1min.index
+    combined_1min['datetime'] = combined_1min['datetime'].apply(lambda x:time_adjustment(x))
+    combined_1min.set_index('datetime', inplace=True)
+
+    ## Remove data from 9:00 to 9:14 (pre-opening) from 2010-10-17
+    combined_1min = combined_1min.drop(combined_1min[(time(8,59,0)<combined_1min.index.time) & (combined_1min.index.time<time(9,15,0)) & (combined_1min.index.date>date(2010,10,17))].index)
+    ## Remove data with NaN at 15:30
+    combined_1min = combined_1min.drop(combined_1min[(combined_1min.index.time==time(15,30,00)) & (combined_1min.open.isnull())].index)
+
+    ## get missing data dates in 1min but not in 1 day missing data
+    daily_missing_dates = pd.read_csv(missing_data_file)
+    stock_daily_missing_dates = daily_missing_dates[stock_name].values.tolist()
+    missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
+    missing_1min_dates.sort()
+
+    if os.path.exists(missing_data_file_1min):
+        c = pd.read_csv(missing_data_file_1min)
+    else:
+        c = pd.DataFrame()
+    if stock_name not in  c.columns:
+        c[stock_name]= missing_1min_dates
+
+    c.to_csv(missing_data_file_1min,index=False)
+
 
     return combined_1min
 
