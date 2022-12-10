@@ -184,11 +184,30 @@ def get_continuous_1min_data(stock_name,data):
     ## dropping duplicate rows
     combined_1min = combined_1min[(~combined_1min.duplicated()) | (combined_1min['open'].isnull())]
 
+    ## removed data when trading halted
+    df_halted = combined_1min.loc['2017-07-10 9:30:00':'2017-07-10 12:30:00']
+    combined_1min = combined_1min.drop(df_halted.index)
+
+    df_halted = combined_1min.loc['2021-02-24 11:40:00':'2017-07-10 15:30:00']
+    combined_1min = combined_1min.drop(df_halted.index)
+
+    ##IMP## Need to add resumed data on 2021-02-24 from 15:45 to 17:00
+
+    ## remove lunch timings for few dates
+    combined_1min_trimmed_time = combined_1min[combined_1min.index.time < time(12,10)]
+    combined_1min_trimmed_time = combined_1min_trimmed_time[combined_1min_trimmed_time.index.time > time(11,25)]
+
+    l = no_traded_data_days_1min(combined_1min_trimmed_time)
+    ll = [datetime.strptime(x, "%Y-%m-%d").date() for x in l]
+    lll = combined_1min_trimmed_time[combined_1min_trimmed_time.index.floor('D').isin(ll)]
+
+    combined_1min = combined_1min.drop(lll.index)
+
     ## remove dates with no trading data
     no_data_days = no_traded_data_days_1min(combined_1min)
     combined_1min = combined_1min[~combined_1min.index.floor('D').isin(no_data_days)]
 
-    ## get missing data in 1min but not in 1 day missing data
+    ## get missing data dates in 1min but not in 1 day missing data
     daily_missing_dates = pd.read_csv(missing_data_file)
     stock_daily_missing_dates = daily_missing_dates[stock_name].values.tolist()
     missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
