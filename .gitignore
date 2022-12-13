@@ -8,3 +8,4 @@ ta-lib-0.4.0-src.tar.gz
 __pycache__/
 utils/__pycache__/
 src/data_cleaning/.DS_Store
+.DS_Store

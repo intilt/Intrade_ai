@@ -3,6 +3,7 @@
         "holidays_file":"Data/misc/holidays.csv",
         "traded_on_holidays_file":"Data/misc/traded_on_holidays.csv",
         "traded_on_weekends_file":"Data/misc/traded_on_weekends.csv",
-        "missing_data_file":"Data/misc/missing_data.csv"
+        "missing_data_file":"Data/misc/missing_data.csv",
+        "missing_data_file_1min":"Data/misc/missing_data_1min.csv"
     }
 }
