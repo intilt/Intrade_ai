@@ -91,7 +91,7 @@ def is_Resistance_Level(df, i):
     return resistance
 
 # Plotting the data
-def plot_support_resistance_levels(df, levels, level_types):
+'''def plot_support_resistance_levels(df, levels, level_types):
     fig, ax = plt.subplots()
     candlestick_ohlc(ax, df.values, width=0.6, colorup='green', colordown='red', alpha=0.8)
     date_format = mpl_dates.DateFormatter('%d %b %Y')
@@ -106,7 +106,7 @@ def plot_support_resistance_levels(df, levels, level_types):
                 colors = 'blue')  # type: ignore
         plt.text(df['Date'][level[0]], level[1], (str(level_type) + ': ' + str(level[1]) + ' '), ha='right', va='center', fontweight='bold', fontsize='x-small')
         plt.title('Support and Resistance levels', fontsize=24, fontweight='bold')
-        fig.show()
+        fig.show()'''
 
 # This function, given a price value, returns True or False depending on if it is too near to some previously discovered key level.
 def distance_from_mean(df, level,levels):
@@ -140,7 +140,7 @@ def get_support_resistance(df):
                 lst.append((df.index[i], level, 'Resistance'))
                 levels.append((i, level))
                 level_types.append('Resistance')
-    plot_support_resistance_levels(df, levels, level_types)
+    #plot_support_resistance_levels(df, levels, level_types)
     df1 = pd.DataFrame(lst)
     df1.columns = ['datetime', 'level', 'level_type']  # type: ignore
     df1 = df1.set_index('datetime')
