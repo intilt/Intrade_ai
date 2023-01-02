@@ -11,4 +11,5 @@ ta-lib
 backtrader
 https://github.com/matplotlib/mpl_finance/archive/master.zip
 mplfinance==0.12.9b5
+boto3==1.26.27
 # TA_Lib-0.4.24-cp310-cp310-win_amd64.whl
