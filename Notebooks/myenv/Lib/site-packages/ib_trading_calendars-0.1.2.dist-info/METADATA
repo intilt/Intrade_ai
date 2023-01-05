@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: ib-trading-calendars
+Version: 0.1.2
+Summary: Trading calendars for Interactive Brokers-supported exchanges
+Home-page: https://github.com/quantrocket-llc/ib-trading-calendars
+Maintainer: QuantRocket LLC
+Maintainer-email: support@quantrocket.com
+License: Apache 2.0
+Platform: UNKNOWN
+Requires-Dist: trading-calendars (>=1.7.0)
+
+UNKNOWN
+
+

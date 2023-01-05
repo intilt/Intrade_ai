@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: quantrocket-client
+Version: 2.8.0.0
+Summary: QuantRocket client
+Home-page: https://www.quantrocket.com
+Author: QuantRocket LLC
+Author-email: support@quantrocket.com
+License: Apache-2.0
+License-File: LICENSE.txt
+Requires-Dist: requests
+Requires-Dist: six
+Requires-Dist: python-dateutil
+Requires-Dist: pyyaml
+
+Visit https://www.quantrocket.com for more details

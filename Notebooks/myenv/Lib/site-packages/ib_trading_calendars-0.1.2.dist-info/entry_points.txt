@@ -1,0 +1,3 @@
+[console_scripts]
+exchange-status = ib_trading_calendars.status:main
+
