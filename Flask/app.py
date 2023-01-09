@@ -65,16 +65,16 @@ def check():
 
 @app.route('/instruments', methods=['GET'])
 def get_instruments():
-    return jsonify(list(config_app['instrument'].items()))
+    return jsonify(list(config_app['instrument'].keys()))
 @app.route('/timeframes', methods=['GET'])
 def get_timeframes():
-    return jsonify(list(config_app['timeframe'].items()))
+    return jsonify(list(config_app['timeframe'].keys()))
 @app.route('/indicators', methods=['GET'])
 def get_indicators():
-    return jsonify(list(config_app['indicators'].items()))
-@app.route('/indicator_params', methods=['GET'])
-def get_indicator_params():
-    return jsonify(list(config_app['indicator_params'].items()))
+    return jsonify(list(config_app['indicators'].keys()))
+@app.route("/indicator_params/<indicator>", methods=['GET'])
+def get_indicator_params(indicator):
+    return jsonify(list(config_app['indicator_params'][indicator].items()))
 
 @app.route('/check', methods=['GET','POST'])
 def check():
@@ -115,7 +115,10 @@ def check():
 
         #computing indicators
         for indicator, field, timeperiod in zip(indicators, fields, timeperiods):
-            df[indicator] = getattr(talib, indicator)(df[field], timeperiod=int(timeperiod))   
+            if indicator=='BBANDS':
+                df['UP_BB'], df['MID_BB'], df['LOW_BB'] = getattr(talib, indicator)(df[field], timeperiod=int(timeperiod), nbdevup=2, nbdevdn=2, matype=0)
+            else:
+                df[indicator] = getattr(talib, indicator)(df[field], timeperiod=int(timeperiod))   
         return render_template('table.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
     else:
         return render_template('index.html')
