@@ -7,15 +7,47 @@ from talib import abstract
 from datetime import datetime,date,time
 import json
 
+import boto3
+import pandas as pd
+
+# Creating the low level functional client
+client = boto3.client(
+    's3',
+    aws_access_key_id = 'AKIARJFZWD4TKOK4T2VO',
+    aws_secret_access_key = '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',
+    region_name = 'ap-south-1'
+)
+
 with open('config/config_cleaning.json', 'r') as openfile:
     config_cleaning = json.load(openfile)
 
-holidays_file = config_cleaning['file_paths']['holidays_file']
+# Create the S3 object
+holidays_file = client.get_object(
+    Bucket = 'intrade-dev-data',
+    Key = config_cleaning['file_paths']['holidays_file']
+)
+traded_on_holidays_file = client.get_object(
+    Bucket = 'intrade-dev-data',
+    Key = config_cleaning['file_paths']['traded_on_holidays_file']
+)
+traded_on_weekends_file = client.get_object(
+    Bucket = 'intrade-dev-data',
+    Key = config_cleaning['file_paths']['traded_on_weekends_file']
+)
+missing_data_file = client.get_object(
+    Bucket = 'intrade-dev-data',
+    Key = config_cleaning['file_paths']['missing_data_file']
+)
+missing_data_file_1min = client.get_object(
+    Bucket = 'intrade-dev-data',
+    Key = config_cleaning['file_paths']['missing_data_file_1min']
+)
+
+'''holidays_file = config_cleaning['file_paths']['holidays_file']
 traded_on_holidays_file = config_cleaning['file_paths']['traded_on_holidays_file']
 traded_on_weekends_file = config_cleaning['file_paths']['traded_on_weekends_file']
 missing_data_file = config_cleaning['file_paths']['missing_data_file']
-missing_data_file_1min = config_cleaning['file_paths']['missing_data_file_1min']
-
+missing_data_file_1min = config_cleaning['file_paths']['missing_data_file_1min']'''
 
 ## Need to use for daily dataframe
 ## for the provided data this function captures the list of traded_on_holidays, traded_on_weekends and missing_data.
@@ -44,7 +76,8 @@ def get_missing_data_dates(stock_name,stock_data):
     print(traded_on_weekends.shape)
 
     ## Convert holidays data to datetime and make it as index
-    holidays = pd.read_csv(holidays_file)
+    holidays = pd.read_csv(holidays_file['Body'])
+    #holidays = pd.read_csv(holidays_file)
     holidays['date'] = holidays['date'].astype('datetime64[ns]')
     holidays = holidays.set_index("date")
 
@@ -56,21 +89,24 @@ def get_missing_data_dates(stock_name,stock_data):
     missing_data = na_data[~na_data.index.isin(holidays.index)]
 
     if os.path.exists(traded_on_holidays_file):
-        a = pd.read_csv(traded_on_holidays_file)
+        a = pd.read_csv(traded_on_holidays_file['Body'])
+        #a = pd.read_csv(traded_on_holidays_file)
     else:
         a = pd.DataFrame()
     if stock_name not in  a.columns:
         a[stock_name]= pd.Series([str(t) for t in traded_on_holidays.index.date])
 
     if os.path.exists(traded_on_weekends_file):
-        b = pd.read_csv(traded_on_weekends_file)
+        b = pd.read_csv(traded_on_weekends_file['Body'])
+        #b = pd.read_csv(traded_on_weekends_file)
     else:
         b = pd.DataFrame()
     if stock_name not in  b.columns:
         b[stock_name]= pd.Series([str(t) for t in traded_on_weekends.index.date])
 
     if os.path.exists(missing_data_file):
-        c = pd.read_csv(missing_data_file)
+        c = pd.read_csv(missing_data_file['Body'])
+        #c = pd.read_csv(missing_data_file)
     else:
         c = pd.DataFrame()
     if stock_name not in  c.columns:
@@ -145,8 +181,8 @@ def get_continuous_1min_data(stock_name,data):
     data = data[cols]
     data = data.set_index("datetime")
     # min_data.index = min_data.index - pd.Timedelta(minutes=1)
-
-    holidays = pd.read_csv(holidays_file)
+    holidays = pd.read_csv(holidays_file['Body'])
+    #holidays = pd.read_csv(holidays_file)
     holidays['date'] = holidays['date'].astype('datetime64[ns]')
 
     # group in 1-minute chunks. 
@@ -233,13 +269,15 @@ def get_continuous_1min_data(stock_name,data):
     combined_1min = combined_1min.drop(combined_1min[(combined_1min.index.time==time(15,30,00)) & (combined_1min.open.isnull())].index)
 
     ## get missing data dates in 1min but not in 1 day missing data
-    daily_missing_dates = pd.read_csv(missing_data_file)
+    daily_missing_dates = pd.read_csv(missing_data_file['Body'])
+    #daily_missing_dates = pd.read_csv(missing_data_file)
     stock_daily_missing_dates = daily_missing_dates[stock_name].values.tolist()
     missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
     missing_1min_dates.sort()
 
     if os.path.exists(missing_data_file_1min):
-        c = pd.read_csv(missing_data_file_1min)
+        c = pd.read_csv(missing_data_file_1min['Body'])
+        #c = pd.read_csv(missing_data_file_1min)
     else:
         c = pd.DataFrame()
     if stock_name not in  c.columns:
