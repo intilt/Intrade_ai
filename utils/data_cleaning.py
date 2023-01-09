@@ -38,9 +38,9 @@ missing_data_file = client.get_object(
     Bucket = 'intrade-dev-data',
     Key = config_cleaning['file_paths']['missing_data_file']
 )
-missing_data_file_1min = client.get_object(
+missing_data_1min = client.get_object(
     Bucket = 'intrade-dev-data',
-    Key = config_cleaning['file_paths']['missing_data_file_1min']
+    Key = config_cleaning['file_paths']['missing_data_1min']
 )
 
 '''holidays_file = config_cleaning['file_paths']['holidays_file']
@@ -88,7 +88,7 @@ def get_missing_data_dates(stock_name,stock_data):
     na_data = na_data[~na_data.index.day_name().isin(['Saturday', 'Sunday'])]
     missing_data = na_data[~na_data.index.isin(holidays.index)]
 
-    if os.path.exists(traded_on_holidays_file):
+    if os.path.exists(config_cleaning['file_paths']['traded_on_holidays_file']):
         a = pd.read_csv(traded_on_holidays_file['Body'])
         #a = pd.read_csv(traded_on_holidays_file)
     else:
@@ -96,7 +96,7 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  a.columns:
         a[stock_name]= pd.Series([str(t) for t in traded_on_holidays.index.date])
 
-    if os.path.exists(traded_on_weekends_file):
+    if os.path.exists(config_cleaning['file_paths']['traded_on_weekends_file']):
         b = pd.read_csv(traded_on_weekends_file['Body'])
         #b = pd.read_csv(traded_on_weekends_file)
     else:
@@ -104,7 +104,7 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  b.columns:
         b[stock_name]= pd.Series([str(t) for t in traded_on_weekends.index.date])
 
-    if os.path.exists(missing_data_file):
+    if os.path.exists(config_cleaning['file_paths']['missing_data_file']):
         c = pd.read_csv(missing_data_file['Body'])
         #c = pd.read_csv(missing_data_file)
     else:
@@ -112,9 +112,9 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  c.columns:
         c[stock_name]= pd.Series([str(t) for t in missing_data.index.date])
 
-    a.to_csv(traded_on_holidays_file,index=False)
-    b.to_csv(traded_on_weekends_file,index=False)
-    c.to_csv(missing_data_file,index=False)
+    a.to_csv(config_cleaning['file_paths']['traded_on_holidays_file'],index=False)
+    b.to_csv(config_cleaning['file_paths']['traded_on_weekends_file'],index=False)
+    c.to_csv(config_cleaning['file_paths']['missing_data_file'],index=False)
 
     return stock_df_continous
 
@@ -174,14 +174,18 @@ def time_adjustment(time_index):
 ## 1min data / intraday data
 ## creating continous data
 def get_continuous_1min_data(stock_name,data):
-
     data['datetime']=data['date']+" "+data['time']
     data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
     cols = ['datetime','open','high','low','close']
     data = data[cols]
     data = data.set_index("datetime")
     # min_data.index = min_data.index - pd.Timedelta(minutes=1)
+    holidays_file = client.get_object(
+        Bucket = 'intrade-dev-data',
+        Key = config_cleaning['file_paths']['holidays_file']
+    )
     holidays = pd.read_csv(holidays_file['Body'])
+    print(holidays)
     #holidays = pd.read_csv(holidays_file)
     holidays['date'] = holidays['date'].astype('datetime64[ns]')
 
@@ -275,15 +279,15 @@ def get_continuous_1min_data(stock_name,data):
     missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
     missing_1min_dates.sort()
 
-    if os.path.exists(missing_data_file_1min):
-        c = pd.read_csv(missing_data_file_1min['Body'])
+    if os.path.exists(config_cleaning['file_paths']['missing_data_1min']):
+        c = pd.read_csv(missing_data_1min['Body'])
         #c = pd.read_csv(missing_data_file_1min)
     else:
         c = pd.DataFrame()
     if stock_name not in  c.columns:
         c[stock_name]= missing_1min_dates
 
-    c.to_csv(missing_data_file_1min,index=False)
+    c.to_csv(config_cleaning['file_paths']['missing_data_1min'],index=False)
 
 
     return combined_1min
