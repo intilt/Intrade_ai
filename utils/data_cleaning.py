@@ -185,7 +185,6 @@ def get_continuous_1min_data(stock_name,data):
         Key = config_cleaning['file_paths']['holidays_file']
     )
     holidays = pd.read_csv(holidays_file['Body'])
-    print(holidays)
     #holidays = pd.read_csv(holidays_file)
     holidays['date'] = holidays['date'].astype('datetime64[ns]')
 
@@ -279,7 +278,7 @@ def get_continuous_1min_data(stock_name,data):
     missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
     missing_1min_dates.sort()
 
-    if os.path.exists(config_cleaning['file_paths']['missing_data_1min']):
+    '''if os.path.exists(config_cleaning['file_paths']['missing_data_1min']):
         c = pd.read_csv(missing_data_1min['Body'])
         #c = pd.read_csv(missing_data_file_1min)
     else:
@@ -287,8 +286,7 @@ def get_continuous_1min_data(stock_name,data):
     if stock_name not in  c.columns:
         c[stock_name]= missing_1min_dates
 
-    c.to_csv(config_cleaning['file_paths']['missing_data_1min'],index=False)
-
+    c.to_csv(config_cleaning['file_paths']['missing_data_1min'],index=False)'''
 
     return combined_1min
 

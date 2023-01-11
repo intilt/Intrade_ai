@@ -6,6 +6,7 @@
         "missing_data_file":"misc/missing_data.csv",
         "nifty_1day":"raw-data/nifty/nifty_1day.csv",
         "nifty_1min":"raw-data/nifty/nifty_1min.csv",
+        "reliance_1min":"raw-data/reliance/reliance_1min.csv",
         "reliance_1day":"raw-data/reliance/reliance_1day.csv",
         "reliance_5min":"raw-data/reliance/reliance_5min.csv",
         "missing_data_1min":"misc/missing_data_1min.csv"
