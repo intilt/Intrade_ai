@@ -70,6 +70,7 @@ def get_missing_data_dates(stock_name,stock_data):
     na_data = stock_df_continous[~stock_df_continous['open'].notna()]
     stock_df_continous = stock_df_continous[stock_df_continous['open'].notna()]
     stock_df_continous = stock_df_continous.sort_index(ascending=True)
+    stock_df_continous = stock_df_continous[stock_df_continous.index >= '2011-01-03']
 
     ## Data present on weekends
     traded_on_weekends = stock_df_continous[stock_df_continous.index.day_name().isin(['Saturday', 'Sunday'])]
@@ -88,7 +89,7 @@ def get_missing_data_dates(stock_name,stock_data):
     na_data = na_data[~na_data.index.day_name().isin(['Saturday', 'Sunday'])]
     missing_data = na_data[~na_data.index.isin(holidays.index)]
 
-    if os.path.exists(config_cleaning['file_paths']['traded_on_holidays_file']):
+    if os.path.exists('Data/misc/traded_on_holidays.csv'):
         a = pd.read_csv(traded_on_holidays_file['Body'])
         #a = pd.read_csv(traded_on_holidays_file)
     else:
@@ -96,7 +97,7 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  a.columns:
         a[stock_name]= pd.Series([str(t) for t in traded_on_holidays.index.date])
 
-    if os.path.exists(config_cleaning['file_paths']['traded_on_weekends_file']):
+    if os.path.exists('Data/misc/traded_on_weekends.csv'):
         b = pd.read_csv(traded_on_weekends_file['Body'])
         #b = pd.read_csv(traded_on_weekends_file)
     else:
@@ -104,7 +105,7 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  b.columns:
         b[stock_name]= pd.Series([str(t) for t in traded_on_weekends.index.date])
 
-    if os.path.exists(config_cleaning['file_paths']['missing_data_file']):
+    if os.path.exists('Data/misc/missing_data.csv'):
         c = pd.read_csv(missing_data_file['Body'])
         #c = pd.read_csv(missing_data_file)
     else:
@@ -112,9 +113,9 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  c.columns:
         c[stock_name]= pd.Series([str(t) for t in missing_data.index.date])
 
-    a.to_csv(config_cleaning['file_paths']['traded_on_holidays_file'],index=False)
-    b.to_csv(config_cleaning['file_paths']['traded_on_weekends_file'],index=False)
-    c.to_csv(config_cleaning['file_paths']['missing_data_file'],index=False)
+    a.to_csv('Data/misc/traded_on_holidays.csv',index=False)
+    b.to_csv('Data/misc/traded_on_weekends.csv',index=False)
+    c.to_csv('Data/misc/missing_data.csv',index=False)
 
     return stock_df_continous
 
@@ -270,6 +271,8 @@ def get_continuous_1min_data(stock_name,data):
     combined_1min = combined_1min.drop(combined_1min[(time(8,59,0)<combined_1min.index.time) & (combined_1min.index.time<time(9,15,0)) & (combined_1min.index.date>date(2010,10,17))].index)
     ## Remove data with NaN at 15:30
     combined_1min = combined_1min.drop(combined_1min[(combined_1min.index.time==time(15,30,00)) & (combined_1min.open.isnull())].index)
+    ## Remove data before 2011-01-03
+    combined_1min = combined_1min[combined_1min.index >= '2011-01-03 09:15:00']
 
     ## get missing data dates in 1min but not in 1 day missing data
     daily_missing_dates = pd.read_csv(missing_data_file['Body'])
@@ -278,7 +281,7 @@ def get_continuous_1min_data(stock_name,data):
     missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
     missing_1min_dates.sort()
 
-    '''if os.path.exists(config_cleaning['file_paths']['missing_data_1min']):
+    if os.path.exists('Data/misc/missing_data_1min.csv'):
         c = pd.read_csv(missing_data_1min['Body'])
         #c = pd.read_csv(missing_data_file_1min)
     else:
@@ -286,7 +289,7 @@ def get_continuous_1min_data(stock_name,data):
     if stock_name not in  c.columns:
         c[stock_name]= missing_1min_dates
 
-    c.to_csv(config_cleaning['file_paths']['missing_data_1min'],index=False)'''
+    c.to_csv('Data/misc/missing_data_1min.csv',index=False)
 
     return combined_1min
 
