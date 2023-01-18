@@ -147,3 +147,29 @@ def get_support_resistance(df):
     df2 = df.join(df1)
     df2 = df2.drop(['Date'], axis=1)
     return df2
+
+## take 1min data and convert them into larger timeframe upto 1day
+def convert_timeframe_min(df, timeframe):
+    df.index = pd.to_datetime(df.index)
+    df['day'] = df.index.normalize()
+    gp = df.groupby('day')
+    dfList = []
+    for k, res in gp:
+        resampledf = res.resample(timeframe, origin='start').agg({'open':'first',
+                                                        'high':'max',
+                                                        'low':'min',
+                                                        'close':'last'})
+        resampledf.reset_index(inplace=True)
+        dfList.append(resampledf)
+    finaldf = pd.concat(dfList, ignore_index=True)
+    finaldf = finaldf.set_index('datetime')
+    return finaldf
+
+## take 1day data and convert them into larger timeframe above 1day
+def convert_timeframe_daily(df, timeframe):
+    resampledf = df.resample(timeframe, origin='start').agg({'open':'first',
+                                                        'high':'max',
+                                                        'low':'min',
+                                                        'close':'last',
+                                                        'volume':'sum'})
+    return resampledf
