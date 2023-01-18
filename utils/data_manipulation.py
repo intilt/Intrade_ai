@@ -147,3 +147,26 @@ def get_support_resistance(df):
     df2 = df.join(df1)
     df2 = df2.drop(['Date'], axis=1)
     return df2
+
+## add daily data close value to the last time of same day in min data adj close column
+## remaining adj close will be same as min data close
+def add_adj_close(min_data, daily_data):
+    min_data.index = pd.to_datetime(min_data.index)
+    daily_data.index = pd.to_datetime(daily_data.index)
+    min_data['day'] = min_data.index.normalize()
+    gp = min_data.groupby('day')
+    dfList = []
+    for k, res in gp:
+        # Check if date is present in the daily data
+        if k in daily_data.index:
+            # Get the close value of the same date from daily data
+            close_value = daily_data.at[k, 'close']
+            # get the last row of the group
+            last_row = res.iloc[-1]
+            # Update the adj close value of the last time of same date with close value from daily data
+            res.at[last_row.name, 'adj close'] = close_value
+        dfList.append(res)
+    min_data = pd.concat(dfList)
+    min_data['adj close'].fillna(min_data['close'], inplace=True)
+    min_data = min_data.drop(columns=['day'])
+    return min_data
