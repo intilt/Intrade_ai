@@ -175,7 +175,10 @@ def time_adjustment(time_index):
 ## 1min data / intraday data
 ## creating continous data
 def get_continuous_1min_data(stock_name,data):
-    data['datetime']=data['date']+" "+data['time']
+    try:
+        data['datetime']=data['date']+" "+data['time']
+    except:
+        pass
     data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
     cols = ['datetime','open','high','low','close']
     data = data[cols]
@@ -199,10 +202,10 @@ def get_continuous_1min_data(stock_name,data):
     t_before = t[t.index.date < date(2011,1,3)]
     t_after = t[t.index.date > date(2011,1,2)]
 
-    t_before = t_before[t_before.index.time < time(15,31)]
+    t_before = t_before[t_before.index.time < time(15,30)]
     t_before = t_before[t_before.index.time > time(9,54)]
     # 2010-10-18
-    t_after = t_after[t_after.index.time < time(15,31)]
+    t_after = t_after[t_after.index.time < time(15,30)]
     t_after = t_after[t_after.index.time > time(9,15)]
 
     ## combined market hours data
@@ -287,8 +290,8 @@ def get_continuous_1min_data(stock_name,data):
     else:
         c = pd.DataFrame()
     if stock_name not in  c.columns:
-        c[stock_name]= missing_1min_dates
-
+        #c[stock_name]= missing_1min_dates
+        c[stock_name]= pd.Series([str(t) for t in missing_1min_dates])
     c.to_csv('Data/misc/missing_data_1min.csv',index=False)
 
     return combined_1min
