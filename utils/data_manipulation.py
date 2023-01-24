@@ -2,7 +2,7 @@ import pandas as pd
 import talib
 from talib import abstract
 import numpy as np
-from mplfinance.original_flavor import candlestick_ohlc
+#from mplfinance.original_flavor import candlestick_ohlc
 import matplotlib.dates as mpl_dates
 import matplotlib.pyplot as plt
 
