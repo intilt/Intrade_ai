@@ -2,36 +2,6 @@
 
 <html lang="en-US">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        $sharerCount = 1;
-
-        $("#addSharer").click(function () {
-          if ($sharerCount < 3) {
-            $("#sharer_0")
-              .clone()
-              .attr("id", "sharer_" + $sharerCount)
-              .insertAfter(".sharers:last")
-              .find("*[id]")
-              .attr("id", "indicator_" + $sharerCount)
-              .val("")
-              .clone()
-              .end();
-            $sharerCount += 1;
-          } else {
-            $("#addSharer").prop("disabled", "true");
-          }
-        });
-      });
-    </script>
   </head>
   <body>
     <hr />
@@ -53,36 +23,27 @@
       <input type="date" name="from" id="from" required />&emsp;
       <input type="date" name="to" id="to" required />
       <br />
-
-      <div class="form">
-        <div class="form-group">
-          Indicator
-
-          <div>
-            <div id="sharer_0" class="field-group sharers">
-              <select id="indicator_0">
-                <option value="sma">SMA</option>
-                <option value="ema">EMA</option>
-                <option value="rsi">RSI</option>
-              </select>
-              <select id="field_0">
-                <option value="open">open</option>
-                <option value="close">close</option>
-                <option value="high">high</option>
-                <option value="low">low</option>
-                <option value="volume">volume</option>
-              </select>
-              <select id="timeperiod_0">
-                <option value="10">10</option>
-                <option value="14">14</option>
-                <option value="20">20</option>
-              </select>
-            </div>
-            <button id="addSharer" type="button">Add Another</button>
-          </div>
-        </div>
+      Indicator:
+      <div id="original">
+        <select name="indicator">
+          <option value="SMA">SMA</option>
+          <option value="EMA">EMA</option>
+          <option value="RSI">RSI</option>
+          <option value="BBANDS">BBANDS</option>
+        </select>
+        <select name="field">
+          <option value="open">open</option>
+          <option value="close">close</option>
+          <option value="high">high</option>
+          <option value="low">low</option>
+          <option value="volume">volume</option>
+        </select>
+        <select name="timeperiod">
+          <option value="10">10</option>
+          <option value="14">14</option>
+          <option value="20">20</option>
+        </select>
       </div>
-
       <br />
       <br />
       <button id="sub" type="submit">Click me</button>

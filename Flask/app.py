@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import json
 import boto3
@@ -63,18 +63,18 @@ def check():
     else:
         return render_template('index.html')'''
 
-@app.route('/', methods=['GET'])
+@app.route('/instruments', methods=['GET'])
 def get_instruments():
-    return config_app['instrument'].items()
-@app.route('/', methods=['GET'])
+    return jsonify(list(config_app['instrument'].keys()))
+@app.route('/timeframes', methods=['GET'])
 def get_timeframes():
-    return config_app['timeframe'].items()
-@app.route('/', methods=['GET'])
+    return jsonify(list(config_app['timeframe'].keys()))
+@app.route('/indicators', methods=['GET'])
 def get_indicators():
-    return config_app['indicators'].items()
-@app.route('/', methods=['GET'])
-def get_indicator_params():
-    return config_app['indicator_params'].items()
+    return jsonify(list(config_app['indicators'].keys()))
+@app.route("/indicator_params/<indicator>", methods=['GET'])
+def get_indicator_params(indicator):
+    return jsonify(list(config_app['indicator_params'][indicator].items()))
 
 @app.route('/check', methods=['GET','POST'])
 def check():
@@ -84,9 +84,9 @@ def check():
         timeframe=request.form.get('timeframe')
         date_from=request.form.get('from')
         date_to=request.form.get('to')
-        indicator=request.form.get("indicator")
-        field=request.form.get('field')
-        timeperiod=request.form.get('timeperiod')
+        indicators = request.form.getlist('indicator')
+        fields = request.form.getlist('field')
+        timeperiods = request.form.getlist('timeperiod')
         
         # Create the S3 object
         obj = client.get_object(
@@ -112,9 +112,13 @@ def check():
         
         #filtering data as per the date range
         df = df.loc[date_from:date_to]
-        
+
         #computing indicators
-        df[indicator] = getattr(talib, indicator)(df[field], timeperiod=int(timeperiod))   
+        for indicator, field, timeperiod in zip(indicators, fields, timeperiods):
+            if indicator=='BBANDS':
+                df['UP_BB'], df['MID_BB'], df['LOW_BB'] = getattr(talib, indicator)(df[field], timeperiod=int(timeperiod), nbdevup=2, nbdevdn=2, matype=0)
+            else:
+                df[indicator] = getattr(talib, indicator)(df[field], timeperiod=int(timeperiod))   
         return render_template('table.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
     else:
         return render_template('index.html')
