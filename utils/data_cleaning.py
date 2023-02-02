@@ -89,7 +89,7 @@ def get_missing_data_dates(stock_name,stock_data):
     na_data = na_data[~na_data.index.day_name().isin(['Saturday', 'Sunday'])]
     missing_data = na_data[~na_data.index.isin(holidays.index)]
 
-    if os.path.exists('Data/misc/traded_on_holidays.csv'):
+    if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_holidays_file']):
         a = pd.read_csv(traded_on_holidays_file['Body'])
         #a = pd.read_csv(traded_on_holidays_file)
     else:
@@ -97,7 +97,7 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  a.columns:
         a[stock_name]= pd.Series([str(t) for t in traded_on_holidays.index.date])
 
-    if os.path.exists('Data/misc/traded_on_weekends.csv'):
+    if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_weekends_file']):
         b = pd.read_csv(traded_on_weekends_file['Body'])
         #b = pd.read_csv(traded_on_weekends_file)
     else:
@@ -105,7 +105,7 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  b.columns:
         b[stock_name]= pd.Series([str(t) for t in traded_on_weekends.index.date])
 
-    if os.path.exists('Data/misc/missing_data.csv'):
+    if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_file']):
         c = pd.read_csv(missing_data_file['Body'])
         #c = pd.read_csv(missing_data_file)
     else:
@@ -113,10 +113,13 @@ def get_missing_data_dates(stock_name,stock_data):
     if stock_name not in  c.columns:
         c[stock_name]= pd.Series([str(t) for t in missing_data.index.date])
 
-    a.to_csv('Data/misc/traded_on_holidays.csv',index=False)
+    '''a.to_csv('Data/misc/traded_on_holidays.csv',index=False)
     b.to_csv('Data/misc/traded_on_weekends.csv',index=False)
-    c.to_csv('Data/misc/missing_data.csv',index=False)
-
+    c.to_csv('Data/misc/missing_data.csv',index=False)'''
+    # Upload the file
+    client.upload_file(a, 'intrade-dev-data', config_cleaning['file_paths']['traded_on_holidays_file'])
+    client.upload_file(b, 'intrade-dev-data', config_cleaning['file_paths']['traded_on_weekends_file'])
+    client.upload_file(c, 'intrade-dev-data', config_cleaning['file_paths']['missing_data_file'])
     return stock_df_continous
 
 
@@ -281,7 +284,7 @@ def get_continuous_1min_data(stock_name,data):
     missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
     missing_1min_dates.sort()
 
-    if os.path.exists('Data/misc/missing_data_1min.csv'):
+    if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_1min']):
         c = pd.read_csv(missing_data_1min['Body'])
         #c = pd.read_csv(missing_data_file_1min)
     else:
@@ -289,7 +292,7 @@ def get_continuous_1min_data(stock_name,data):
     if stock_name not in  c.columns:
         c[stock_name]= missing_1min_dates
 
-    c.to_csv('Data/misc/missing_data_1min.csv',index=False)
-
+    #c.to_csv('Data/misc/missing_data_1min.csv',index=False)
+    client.upload_file(c, 'intrade-dev-data', config_cleaning['file_paths']['missing_data_1min'])
     return combined_1min
 
