@@ -116,10 +116,18 @@ def get_missing_data_dates(stock_name,stock_data):
     '''a.to_csv('Data/misc/traded_on_holidays.csv',index=False)
     b.to_csv('Data/misc/traded_on_weekends.csv',index=False)
     c.to_csv('Data/misc/missing_data.csv',index=False)'''
+    a = a.to_csv(index=False)
+    b = b.to_csv(index=False)
+    c = c.to_csv(index=False)
     # Upload the file
-    client.upload_file(a, 'intrade-dev-data', config_cleaning['file_paths']['traded_on_holidays_file'])
-    client.upload_file(b, 'intrade-dev-data', config_cleaning['file_paths']['traded_on_weekends_file'])
-    client.upload_file(c, 'intrade-dev-data', config_cleaning['file_paths']['missing_data_file'])
+    '''client.upload_file(Filename=a, Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_holidays_file'])
+    client.upload_file(Filename=b, Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_weekends_file'])
+    client.upload_file(Filename=c, Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_file'])'''
+
+    client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_holidays_file'], Body=a)
+    client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_weekends_file'], Body=b)
+    client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_file'], Body=c)
+
     return stock_df_continous
 
 
@@ -293,6 +301,8 @@ def get_continuous_1min_data(stock_name,data):
         c[stock_name]= missing_1min_dates
 
     #c.to_csv('Data/misc/missing_data_1min.csv',index=False)
-    client.upload_file(c, 'intrade-dev-data', config_cleaning['file_paths']['missing_data_1min'])
+    c = c.to_csv(index=False)
+    #client.upload_file(c, 'intrade-dev-data', config_cleaning['file_paths']['missing_data_1min'])
+    client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_1min'], Body=c)
     return combined_1min
 
