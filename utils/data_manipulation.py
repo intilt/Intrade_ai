@@ -2,9 +2,22 @@ import pandas as pd
 import talib
 from talib import abstract
 import numpy as np
-#from mplfinance.original_flavor import candlestick_ohlc
 import matplotlib.dates as mpl_dates
 import matplotlib.pyplot as plt
+import boto3
+import json
+
+# Creating the low level functional client
+client = boto3.client(
+    's3',
+    aws_access_key_id = 'AKIARJFZWD4TKOK4T2VO',
+    aws_secret_access_key = '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',
+    region_name = 'ap-south-1'
+)
+
+# Loading the json file
+with open('config/config_app.json', 'r') as openfile:
+    config_app = json.load(openfile)
 
 plt.rcParams['figure.figsize'] = [12, 7]
 plt.rc('font', size=14)
@@ -196,3 +209,13 @@ def add_adj_close(min_data, daily_data):
     min_data['adj close'].fillna(min_data['close'], inplace=True)
     min_data = min_data.drop(columns=['day'])
     return min_data
+
+## getting the data files from cloud
+def get_data(stock_name, timeframe):
+    # Create the S3 object
+    data = client.get_object(
+        Bucket = 'intrade-dev-data',
+        Key = config_app['instrument'][stock_name]+stock_name.lower()+'_'+config_app['timeframe'][timeframe]
+    )
+    df = pd.read_csv(data['Body'])
+    return df
