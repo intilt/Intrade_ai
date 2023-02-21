@@ -1,7 +1,7 @@
 {
   "instrument": {
-    "nifty": "raw-data/nifty/",
-    "reliance": "raw-data/reliance/"
+    "Nifty": "raw-data/nifty/",
+    "Reliance": "raw-data/reliance/"
   },
   "timeframe": {
     "1min": "1min.csv",
