@@ -43,6 +43,7 @@ fields = ['open','close','high','low']
 
 timeperiods = [10,14,20,100,150,200]
 
+#sidebar elements
 with st.sidebar:
     st.header('Setting up of stock data')
     stock_name = st.radio(
@@ -55,12 +56,8 @@ with st.sidebar:
     )
     #set date range
     start_date = st.date_input("Start date", value=datetime.date(2011, 1, 3), min_value=datetime.date(2011, 1, 3))
-    end_date = st.date_input("End date", value=datetime.date(2012, 1, 3))
+    end_date = st.date_input("End date", value=datetime.date(2012, 1, 3), min_value=datetime.date(2011, 1, 3))
 
-    #set graph field
-    graph_type = st.selectbox(
-        "Choose a graph field",fields
-    )
     st.header('Choose timeframe for conversion')
     convert_timeframe = st.selectbox(
         "Choose a timeframe",
@@ -85,6 +82,7 @@ NIFTY_DAILY_FILE = 'Streamlit/nifty_daily_continous.csv'
 RELIANCE_MIN_FILE = 'Streamlit/reliance_min_continous.csv'
 RELIANCE_DAILY_FILE = 'Streamlit/reliance_daily_continous.csv'
 
+#load the data and filter it, according to time interva;
 @st.cache_data
 def load_data(stock_name,timeframe,start_date,end_date):
     try:
@@ -119,16 +117,19 @@ df = load_data(stock_name,timeframe,start_date,end_date)
 # Notify the reader that the data was successfully loaded.
 data_load_state.text("Done!")
 
+#show raw data
 if st.checkbox('Show raw data'):
     st.subheader('Raw data')
     st.dataframe(df)
 
-if st.checkbox(f'Show line graph for {graph_type} values'):
+#show graph
+if st.checkbox(f'Show candlestick graph'):
     fig = go.Figure(data=[go.Candlestick(x=df.index,
-                open=df['open'],
-                high=df['high'],
-                low=df['low'],
-                close=df['close'])])
+                                      open=df['open'],
+                                      high=df['high'],
+                                      low=df['low'],
+                                      close=df['close'])])
+    fig.update_layout(title=f"{stock_name} data",xaxis_rangeslider_visible=False)
     st.plotly_chart(fig)
 
 if st.checkbox('Convert data into desire timeframe'):
@@ -153,6 +154,7 @@ if st.checkbox(f'Get indicator graph'):
             st.line_chart(stock_data[['close',indicators[indicator]]])
     else:
         st.text('Choose 1day for plotting')
+
 if st.checkbox('Check'):
     fig = go.Figure(data=[go.Candlestick(x=df.index,
                     open=df['open'],
@@ -190,7 +192,7 @@ if st.checkbox('Check'):
     fig.data[2].x = sell_dates
     fig.data[2].y = df.loc[df.index.isin(sell_dates)]['low']
 
-    fig.update_layout(title='My Candlestick Chart')
+    fig.update_layout(xaxis_rangeslider_visible=False)
 
     st.plotly_chart(fig)
 
