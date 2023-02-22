@@ -46,7 +46,13 @@ def indicator(data):
     return stock_data
 
 ## function to get all indicator in dataframe
-def get_indicators(data):
+def get_indicators(stock_data):
+    data = stock_data.copy()
+    try:
+        data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
+        data = data.set_index("datetime")
+    except:
+        pass
     # converting daily data to monthly data
     nifty_df_monthly = data.groupby(pd.Grouper(freq='M')).agg({"open": "first", 
                                              "high": "max", 
@@ -163,7 +169,11 @@ def get_support_resistance(df):
 
 ## take 1min data and convert them into larger timeframe upto 1day
 def convert_timeframe_min(df, timeframe):
-    df.index = pd.to_datetime(df.index)
+    try:
+        df = df.set_index("datetime")
+        df.index = pd.to_datetime(df.index)
+    except:
+        df.index = pd.to_datetime(df.index)
     df['day'] = df.index.normalize()
     gp = df.groupby('day')
     dfList = []
