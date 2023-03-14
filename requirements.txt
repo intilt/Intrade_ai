@@ -15,4 +15,6 @@ boto3==1.26.27
 flask==2.2.2
 statsmodels==0.13.5
 tensorflow==2.11.0
+
+openbb==2.3.1
 # TA_Lib-0.4.24-cp310-cp310-win_amd64.whl

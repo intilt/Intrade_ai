@@ -186,8 +186,11 @@ def time_adjustment(time_index):
 ## 1min data / intraday data
 ## creating continous data
 def get_continuous_1min_data(stock_name,data):
-    data['datetime']=data['date']+" "+data['time']
-    data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
+    try:
+        data['datetime']=data['date']+" "+data['time']
+        data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
+    except:
+        data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
     cols = ['datetime','open','high','low','close']
     data = data[cols]
     data = data.set_index("datetime")
@@ -283,7 +286,9 @@ def get_continuous_1min_data(stock_name,data):
     ## Remove data with NaN at 15:30
     combined_1min = combined_1min.drop(combined_1min[(combined_1min.index.time==time(15,30,00)) & (combined_1min.open.isnull())].index)
     ## Remove data before 2011-01-03
-    combined_1min = combined_1min[combined_1min.index >= '2011-01-03 09:15:00']
+    combined_1min = combined_1min[combined_1min.index >= '2011-01-03']
+    combined_1min = combined_1min[combined_1min.index.time < time(15,31)]
+    combined_1min = combined_1min[combined_1min.index.time > time(9,14)]
 
     ## get missing data dates in 1min but not in 1 day missing data
     daily_missing_dates = pd.read_csv(missing_data_file['Body'])
@@ -298,8 +303,7 @@ def get_continuous_1min_data(stock_name,data):
     else:
         c = pd.DataFrame()
     if stock_name not in  c.columns:
-        c[stock_name]= missing_1min_dates
-
+        c[stock_name]= pd.Series([str(t) for t in missing_1min_dates])
     #c.to_csv('Data/misc/missing_data_1min.csv',index=False)
     c = c.to_csv(index=False)
     #client.upload_file(c, 'intrade-dev-data', config_cleaning['file_paths']['missing_data_1min'])

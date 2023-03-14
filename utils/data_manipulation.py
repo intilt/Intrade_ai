@@ -150,7 +150,10 @@ def get_support_resistance(df):
 
 ## take 1min data and convert them into larger timeframe upto 1day
 def convert_timeframe_min(df, timeframe):
-    df.index = pd.to_datetime(df.index)
+    try:
+        df = df.set_index("datetime")
+    except:
+        df.index = pd.to_datetime(df.index)
     df['day'] = df.index.normalize()
     gp = df.groupby('day')
     dfList = []
@@ -177,6 +180,11 @@ def convert_timeframe_daily(df, timeframe):
 ## add daily data close value to the last time of same day in min data adj close column
 ## remaining adj close will be same as min data close
 def add_adj_close(min_data, daily_data):
+    try:
+        min_data = min_data.set_index("datetime")
+        daily_data = daily_data.set_index("datetime")
+    except:
+        pass
     min_data.index = pd.to_datetime(min_data.index)
     daily_data.index = pd.to_datetime(daily_data.index)
     min_data['day'] = min_data.index.normalize()
