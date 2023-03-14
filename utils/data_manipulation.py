@@ -172,6 +172,7 @@ def convert_timeframe_min(df, timeframe):
     try:
         df = df.set_index("datetime")
         df.index = pd.to_datetime(df.index)
+
     except:
         df.index = pd.to_datetime(df.index)
     df['day'] = df.index.normalize()
@@ -200,6 +201,11 @@ def convert_timeframe_daily(df, timeframe):
 ## add daily data close value to the last time of same day in min data adj close column
 ## remaining adj close will be same as min data close
 def add_adj_close(min_data, daily_data):
+    try:
+        min_data = min_data.set_index("datetime")
+        daily_data = daily_data.set_index("datetime")
+    except:
+        pass
     min_data.index = pd.to_datetime(min_data.index)
     daily_data.index = pd.to_datetime(daily_data.index)
     min_data['day'] = min_data.index.normalize()
