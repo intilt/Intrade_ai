@@ -53,12 +53,14 @@ missing_data_file_1min = config_cleaning['file_paths']['missing_data_file_1min']
 ## for the provided data this function captures the list of traded_on_holidays, traded_on_weekends and missing_data.
 ## Function also returns the continous data
 def get_missing_data_dates(stock_name,stock_data):
-    
     stock_df = stock_data.copy()
-    stock_df.drop(columns=['stock_code'],inplace=True)
-    ## convert date to datetime format and make it as index
-    stock_df['datetime'] =  pd.to_datetime(stock_df['datetime'], infer_datetime_format=True)
-    stock_df = stock_df.set_index("datetime")
+    try:
+        stock_df.drop(columns=['stock_code'],inplace=True)
+        stock_df['datetime'] =  pd.to_datetime(stock_df['datetime'], infer_datetime_format=True)
+        stock_df = stock_df.set_index("datetime")
+    except:
+        stock_df['datetime'] =  pd.to_datetime(stock_df['datetime'], infer_datetime_format=True)
+        stock_df = stock_df.set_index("datetime")
 
     ## Convert to  daily continous data
     stock_df_continous = stock_df.groupby(pd.Grouper(freq='1D')).agg({"open": "first", 
@@ -186,17 +188,21 @@ def time_adjustment(time_index):
 ## 1min data / intraday data
 ## creating continous data
 def get_continuous_1min_data(stock_name,data):
-    data['datetime']=data['date']+" "+data['time']
-    data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
+    try:
+        data['datetime']=data['date']+" "+data['time']
+        data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
+    except:
+        data['datetime'] =  pd.to_datetime(data['datetime'], infer_datetime_format=True)
     cols = ['datetime','open','high','low','close']
     data = data[cols]
     data = data.set_index("datetime")
     # min_data.index = min_data.index - pd.Timedelta(minutes=1)
-    holidays_file = client.get_object(
+    '''holidays_file = client.get_object(
         Bucket = 'intrade-dev-data',
         Key = config_cleaning['file_paths']['holidays_file']
-    )
+    )'''
     holidays = pd.read_csv(holidays_file['Body'])
+    print(holidays.shape)
     #holidays = pd.read_csv(holidays_file)
     holidays['date'] = holidays['date'].astype('datetime64[ns]')
 
@@ -284,6 +290,9 @@ def get_continuous_1min_data(stock_name,data):
     combined_1min = combined_1min.drop(combined_1min[(combined_1min.index.time==time(15,30,00)) & (combined_1min.open.isnull())].index)
     ## Remove data before 2011-01-03
     combined_1min = combined_1min[combined_1min.index >= '2011-01-03 09:15:00']
+
+    combined_1min = combined_1min[combined_1min.index.time < time(15,31)]
+    combined_1min = combined_1min[combined_1min.index.time > time(9,14)]
 
     ## get missing data dates in 1min but not in 1 day missing data
     daily_missing_dates = pd.read_csv(missing_data_file['Body'])
