@@ -1,11 +1,12 @@
 {
     "file_paths" : {
-        "holidays_file":"misc/holidays.csv",
-        "traded_on_holidays_file":"misc/traded_on_holidays.csv",
-        "traded_on_weekends_file":"misc/traded_on_weekends.csv",
-        "missing_data_file":"misc/missing_data.csv",
-        "nifty_1day":"raw-data/nifty/nifty_1day.csv",
-        "nifty_1min":"raw-data/nifty/nifty_1min.csv",
+        "holidays_file":"Data/misc/holidays.csv",
+        "traded_on_holidays_file":"Data/misc/traded_on_holidays.csv",
+        "traded_on_weekends_file":"Data/misc/traded_on_weekends.csv",
+        "missing_data_file":"Data/misc/missing_data.csv",
+        "missing_data_file_1min":"Data/misc/missing_data_1min.csv",
+        "nifty_1day":"Data/Nifty/nifty_1day.csv",
+        "nifty_1min":"Data/Nifty/nifty_1min.csv",
         "reliance_1min":"raw-data/reliance/reliance_1min.csv",
         "reliance_1day":"raw-data/reliance/reliance_1day.csv",
         "reliance_5min":"raw-data/reliance/reliance_5min.csv",

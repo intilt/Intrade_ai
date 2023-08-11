@@ -10,44 +10,46 @@ import json
 import boto3
 import pandas as pd
 
-# Creating the low level functional client
-client = boto3.client(
-    's3',
-    aws_access_key_id = 'AKIARJFZWD4TKOK4T2VO',
-    aws_secret_access_key = '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',
-    region_name = 'ap-south-1'
-)
+#### Creating the low level functional client - AWS connection
+# client = boto3.client(
+#     's3',
+#     aws_access_key_id = 'AKIARJFZWD4TKOK4T2VO',
+#     aws_secret_access_key = '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',
+#     region_name = 'ap-south-1'
+# )
+
+
 
 with open('config/config_cleaning.json', 'r') as openfile:
     config_cleaning = json.load(openfile)
 
 # Create the S3 object
-holidays_file = client.get_object(
-    Bucket = 'intrade-dev-data',
-    Key = config_cleaning['file_paths']['holidays_file']
-)
-traded_on_holidays_file = client.get_object(
-    Bucket = 'intrade-dev-data',
-    Key = config_cleaning['file_paths']['traded_on_holidays_file']
-)
-traded_on_weekends_file = client.get_object(
-    Bucket = 'intrade-dev-data',
-    Key = config_cleaning['file_paths']['traded_on_weekends_file']
-)
-missing_data_file = client.get_object(
-    Bucket = 'intrade-dev-data',
-    Key = config_cleaning['file_paths']['missing_data_file']
-)
-missing_data_1min = client.get_object(
-    Bucket = 'intrade-dev-data',
-    Key = config_cleaning['file_paths']['missing_data_1min']
-)
+# holidays_file = client.get_object(
+#     Bucket = 'intrade-dev-data',
+#     Key = config_cleaning['file_paths']['holidays_file']
+# )
+# traded_on_holidays_file = client.get_object(
+#     Bucket = 'intrade-dev-data',
+#     Key = config_cleaning['file_paths']['traded_on_holidays_file']
+# )
+# traded_on_weekends_file = client.get_object(
+#     Bucket = 'intrade-dev-data',
+#     Key = config_cleaning['file_paths']['traded_on_weekends_file']
+# )
+# missing_data_file = client.get_object(
+#     Bucket = 'intrade-dev-data',
+#     Key = config_cleaning['file_paths']['missing_data_file']
+# )
+# missing_data_1min = client.get_object(
+#     Bucket = 'intrade-dev-data',
+#     Key = config_cleaning['file_paths']['missing_data_1min']
+# )
 
-'''holidays_file = config_cleaning['file_paths']['holidays_file']
+holidays_file = config_cleaning['file_paths']['holidays_file']
 traded_on_holidays_file = config_cleaning['file_paths']['traded_on_holidays_file']
 traded_on_weekends_file = config_cleaning['file_paths']['traded_on_weekends_file']
 missing_data_file = config_cleaning['file_paths']['missing_data_file']
-missing_data_file_1min = config_cleaning['file_paths']['missing_data_file_1min']'''
+missing_data_file_1min = config_cleaning['file_paths']['missing_data_file_1min']
 
 ## Need to use for daily dataframe
 ## for the provided data this function captures the list of traded_on_holidays, traded_on_weekends and missing_data.
@@ -79,8 +81,8 @@ def get_missing_data_dates(stock_name,stock_data):
     print(traded_on_weekends.shape)
 
     ## Convert holidays data to datetime and make it as index
-    holidays = pd.read_csv(holidays_file['Body'])
-    #holidays = pd.read_csv(holidays_file)
+    # holidays = pd.read_csv(holidays_file['Body'])
+    holidays = pd.read_csv(holidays_file)
     holidays['date'] = holidays['date'].astype('datetime64[ns]')
     holidays = holidays.set_index("date")
 
@@ -91,44 +93,44 @@ def get_missing_data_dates(stock_name,stock_data):
     na_data = na_data[~na_data.index.day_name().isin(['Saturday', 'Sunday'])]
     missing_data = na_data[~na_data.index.isin(holidays.index)]
 
-    if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_holidays_file']):
-        a = pd.read_csv(traded_on_holidays_file['Body'])
-        #a = pd.read_csv(traded_on_holidays_file)
-    else:
-        a = pd.DataFrame()
+    # if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_holidays_file']):
+        # a = pd.read_csv(traded_on_holidays_file['Body'])
+    a = pd.read_csv(traded_on_holidays_file)
+    # else:
+        # a = pd.DataFrame()
     if stock_name not in  a.columns:
         a[stock_name]= pd.Series([str(t) for t in traded_on_holidays.index.date])
 
-    if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_weekends_file']):
-        b = pd.read_csv(traded_on_weekends_file['Body'])
-        #b = pd.read_csv(traded_on_weekends_file)
-    else:
-        b = pd.DataFrame()
+    # if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_weekends_file']):
+        # b = pd.read_csv(traded_on_weekends_file['Body'])
+    b = pd.read_csv(traded_on_weekends_file)
+    # else:
+        # b = pd.DataFrame()
     if stock_name not in  b.columns:
         b[stock_name]= pd.Series([str(t) for t in traded_on_weekends.index.date])
 
-    if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_file']):
-        c = pd.read_csv(missing_data_file['Body'])
-        #c = pd.read_csv(missing_data_file)
-    else:
-        c = pd.DataFrame()
+    # if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_file']):
+        # c = pd.read_csv(missing_data_file['Body'])
+    c = pd.read_csv(missing_data_file)
+    # else:
+    #     c = pd.DataFrame()
     if stock_name not in  c.columns:
         c[stock_name]= pd.Series([str(t) for t in missing_data.index.date])
 
-    '''a.to_csv('Data/misc/traded_on_holidays.csv',index=False)
+    a.to_csv('Data/misc/traded_on_holidays.csv',index=False)
     b.to_csv('Data/misc/traded_on_weekends.csv',index=False)
-    c.to_csv('Data/misc/missing_data.csv',index=False)'''
-    a = a.to_csv(index=False)
-    b = b.to_csv(index=False)
-    c = c.to_csv(index=False)
+    c.to_csv('Data/misc/missing_data.csv',index=False)
+    # a = a.to_csv(index=False)
+    # b = b.to_csv(index=False)
+    # c = c.to_csv(index=False)
     # Upload the file
     '''client.upload_file(Filename=a, Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_holidays_file'])
     client.upload_file(Filename=b, Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_weekends_file'])
     client.upload_file(Filename=c, Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_file'])'''
 
-    client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_holidays_file'], Body=a)
-    client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_weekends_file'], Body=b)
-    client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_file'], Body=c)
+    # client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_holidays_file'], Body=a)
+    # client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['traded_on_weekends_file'], Body=b)
+    # client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_file'], Body=c)
 
     return stock_df_continous
 
@@ -201,9 +203,9 @@ def get_continuous_1min_data(stock_name,data):
         Bucket = 'intrade-dev-data',
         Key = config_cleaning['file_paths']['holidays_file']
     )'''
-    holidays = pd.read_csv(holidays_file['Body'])
+    # holidays = pd.read_csv(holidays_file['Body'])
+    holidays = pd.read_csv(holidays_file)
     print(holidays.shape)
-    #holidays = pd.read_csv(holidays_file)
     holidays['date'] = holidays['date'].astype('datetime64[ns]')
 
     # group in 1-minute chunks. 
@@ -303,16 +305,16 @@ def get_continuous_1min_data(stock_name,data):
     missing_1min_dates = list(set(no_data_days) - set(stock_daily_missing_dates))
     missing_1min_dates.sort()
 
-    if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_1min']):
-        c = pd.read_csv(missing_data_1min['Body'])
-        #c = pd.read_csv(missing_data_file_1min)
-    else:
-        c = pd.DataFrame()
+    # if client.head_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_1min']):
+        # c = pd.read_csv(missing_data_1min['Body'])
+    c = pd.read_csv(missing_data_file_1min)
+    # else:
+        # c = pd.DataFrame()
     if stock_name not in  c.columns:
         c[stock_name]= pd.Series([str(t) for t in missing_1min_dates])
     #c.to_csv('Data/misc/missing_data_1min.csv',index=False)
     c = c.to_csv(index=False)
     #client.upload_file(c, 'intrade-dev-data', config_cleaning['file_paths']['missing_data_1min'])
-    client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_1min'], Body=c)
+    # client.put_object(Bucket='intrade-dev-data', Key=config_cleaning['file_paths']['missing_data_1min'], Body=c)
     return combined_1min
 
